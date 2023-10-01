@@ -22,17 +22,7 @@ const fireBaseBackend = getFirebaseBackend();
 
 function* loginUser({ payload: { user } }: any) {
   try {
-    if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-      const response: Promise<any> = yield call(
-        fireBaseBackend.loginUser,
-        user.email,
-        user.password
-      );
-      // myData
-      yield put(
-        authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
-      );
-    } else if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
+    if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
       const response: Promise<any> = yield call(postJwtLogin, {
         email: user.email,
         password: user.password,
@@ -46,7 +36,7 @@ function* loginUser({ payload: { user } }: any) {
         email: user.email,
         password: user.password,
       });
-      setLoggeedInUser(response);
+      // setLoggeedInUser(response);
       yield put(
         authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
       );
@@ -107,7 +97,7 @@ function* logoutUser() {
 function* loginSaga() {
   yield takeEvery(AuthLoginActionTypes.LOGIN_USER, loginUser);
   yield takeEvery(AuthLoginActionTypes.LOGOUT_USER, logoutUser);
-  yield takeLatest(AuthLoginActionTypes.SOCIAL_LOGIN, socialLogin);
+  // yield takeLatest(AuthLoginActionTypes.SOCIAL_LOGIN, socialLogin);
 }
 
 export default loginSaga;

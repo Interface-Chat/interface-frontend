@@ -13,7 +13,6 @@ import {
   receiveMessageFromUser,
   deleteMessage,
   deleteUserMessages,
-  toggleArchiveContact,
 } from "../../../redux/actions";
 
 // hooks
@@ -29,16 +28,66 @@ import { MessagesTypes } from "../../../data/messages";
 
 // dummy data
 import { pinnedTabs } from "../../../data/index";
+import axios from "axios";
 
 interface IndexProps {
-  isChannel: boolean;
+  topicID: any;
+  user: any;
+  socket: any;
+  // isChannel: boolean;
 }
-const Index = ({ isChannel }: IndexProps) => {
+const Index = ({
+  topicID,
+  user,
+  socket,
+}: IndexProps) => {
+  // const [socket, setSocket] = useState<Socket>();
+  const [messages, setMessages] = useState<any[]>([]);
+
+
+  const [topic, setTopic] = useState<any>(null);
+
+  useEffect(() => {
+
+    // Make a GET request
+    axios.get(`http://localhost:3001/topics/${topicID}`)
+      .then((response) => {
+        // Handle the successful response here
+        // console.log(response);
+
+        setTopic(response);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+
+
+  const sendMessage = (text: any) => {
+    if (socket && text.trim() !== '') {
+      const messageData = {
+        topic: topic.id, // Replace with the actual topic
+        id: user, // Replace with the actual username
+        message: text,
+      };
+      console.log(messageData);
+      
+      socket.emit('handleChatMessages', messageData);
+      // setInputMessage('');
+    }
+  };
+
+  // console.log(topic);
+
+
+
   // global store
-  const { dispatch, useAppSelector } = useRedux();
+  const { useAppSelector } = useRedux();
 
   const {
-    chatUserDetails,
+    chatTopicDetails,
     chatUserConversations,
     isUserMessageSent,
     isMessageDeleted,
@@ -46,7 +95,7 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted,
     isImageDeleted,
   } = useAppSelector(state => ({
-    chatUserDetails: state.Chats.chatUserDetails,
+    chatTopicDetails: state.Chats.topicDetails,
     chatUserConversations: state.Chats.chatUserConversations,
     isUserMessageSent: state.Chats.isUserMessageSent,
     isMessageDeleted: state.Chats.isMessageDeleted,
@@ -54,15 +103,17 @@ const Index = ({ isChannel }: IndexProps) => {
     isUserMessagesDeleted: state.Chats.isUserMessagesDeleted,
     isImageDeleted: state.Chats.isImageDeleted,
   }));
+  // console.log(chatUserDetails);
+  // console.log(chatTopicDetails);
 
-  const onOpenUserDetails = () => {
-    dispatch(toggleUserDetailsTab(true));
-  };
+  // const onOpenUserDetails = () => {
+  //   dispatch(toggleUserDetailsTab(true));
+  // };
 
   /*
   hooks
   */
-  const { userProfile } = useProfile();
+  // const { userProfile } = useProfile();
 
   /*
   reply handeling
@@ -84,28 +135,16 @@ const Index = ({ isChannel }: IndexProps) => {
       image: data.image && data.image,
       newimage: data.newimage && data.newimage,
       attachments: data.attachments && data.attachments,
-      meta: {
-        receiver: chatUserDetails.id,
-        sender: userProfile.uid,
-      },
+
     };
 
     if (replyData && replyData !== null) {
       params["replyOf"] = replyData;
     }
+    // console.log(params.text);
+    sendMessage(params.text)
 
-    dispatch(onSendMessage(params));
-    if (!isChannel) {
-      setTimeout(() => {
-        dispatch(receiveMessage(chatUserDetails.id));
-      }, 1000);
-      setTimeout(() => {
-        dispatch(readMessage(chatUserDetails.id));
-      }, 1500);
-      setTimeout(() => {
-        dispatch(receiveMessageFromUser(chatUserDetails.id));
-      }, 2000);
-    }
+    // dispatch(onSendMessage(params));
     setReplyData(null);
   };
 
@@ -118,52 +157,49 @@ const Index = ({ isChannel }: IndexProps) => {
       isUserMessagesDeleted ||
       isImageDeleted
     ) {
-      dispatch(getChatUserConversations(chatUserDetails.id));
+      // dispatch(getChatUserConversations(chatTopicDetails.id));
     }
   }, [
-    dispatch,
+    // dispatch,
     isUserMessageSent,
-    chatUserDetails,
     isMessageDeleted,
     isMessageForwarded,
     isUserMessagesDeleted,
     isImageDeleted,
   ]);
 
-  const onDeleteMessage = (messageId: string | number) => {
-    dispatch(deleteMessage(chatUserDetails.id, messageId));
-  };
+  // const onDeleteMessage = (messageId: string | number) => {
+  //   dispatch(deleteMessage(chatTopicDetails.id, messageId));
+  // };
 
-  const onDeleteUserMessages = () => {
-    dispatch(deleteUserMessages(chatUserDetails.id));
-  };
+  // const onDeleteUserMessages = () => {
+  //   dispatch(deleteUserMessages(chatTopicDetails.id));
+  // };
 
-  const onToggleArchive = () => {
-    dispatch(toggleArchiveContact(chatUserDetails.id));
-  };
+
   return (
     <>
-      <UserHead
-        chatUserDetails={chatUserDetails}
-        pinnedTabs={pinnedTabs}
-        onOpenUserDetails={onOpenUserDetails}
-        onDelete={onDeleteUserMessages}
-        isChannel={isChannel}
-        onToggleArchive={onToggleArchive}
-      />
-      <Conversation
-        chatUserConversations={chatUserConversations}
-        chatUserDetails={chatUserDetails}
-        onDelete={onDeleteMessage}
-        onSetReplyData={onSetReplyData}
-        isChannel={isChannel}
-      />
-      <ChatInputSection
-        onSend={onSend}
-        replyData={replyData}
-        onSetReplyData={onSetReplyData}
-        chatUserDetails={chatUserDetails}
-      />
+      {topic !== null ? ( // Conditionally render UserHead when topic is not null
+        <>
+          <UserHead
+            topic={topic}
+            chatTopicDetails={chatTopicDetails}
+          />
+          <Conversation
+            topic={topic}
+            user={user}
+            socket={socket}
+            onSetReplyData={onSetReplyData} 
+          />
+          <ChatInputSection
+            onSend={onSend}
+          />
+        </>
+      ) : (
+        // You can show a loading indicator or message here while waiting for the response
+        <div>Loading...</div>
+      )}
+
     </>
   );
 };

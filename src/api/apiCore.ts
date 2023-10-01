@@ -44,8 +44,8 @@ class APIClient {
   /**
    * Fetches data from given url
    */
-  get = (url: string, params?: {}) => {
-    return axios.get(url, params);
+  get = async (url: string, params?: {}) => {
+    return await axios.get(url, params);
   };
 
   /**

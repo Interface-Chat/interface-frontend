@@ -4,6 +4,7 @@ import { ChatsActionTypes, ChatsState } from "./types";
 export const INIT_STATE: ChatsState = {
   favourites: [],
   directMessages: [],
+  topics: [],
   channels: [],
   selectedChat: null,
   chatUserDetails: {},
@@ -11,6 +12,7 @@ export const INIT_STATE: ChatsState = {
   isOpenUserDetails: false,
   channelDetails: {},
   archiveContacts: [],
+  topicDetails: {}
 };
 
 const Chats = (state = INIT_STATE, action: any) => {
@@ -36,6 +38,14 @@ const Chats = (state = INIT_STATE, action: any) => {
           return {
             ...state,
             channels: action.payload.data,
+            isChannelsFetched: true,
+            getChannelsLoading: false,
+            isChannelCreated: false,
+          };
+        case ChatsActionTypes.GET_TOPICS:
+          return {
+            ...state,
+            topics: action.payload.data,
             isChannelsFetched: true,
             getChannelsLoading: false,
             isChannelCreated: false,
@@ -154,6 +164,12 @@ const Chats = (state = INIT_STATE, action: any) => {
             isChannelsFetched: false,
             getChannelsLoading: false,
           };
+        case ChatsActionTypes.GET_TOPICS:
+          return {
+            ...state,
+            isChannelsFetched: false,
+            getChannelsLoading: false,
+          };
         case ChatsActionTypes.ADD_CONTACTS:
           return {
             ...state,
@@ -249,6 +265,12 @@ const Chats = (state = INIT_STATE, action: any) => {
         getDirectMessagesLoading: true,
       };
     case ChatsActionTypes.GET_CHANNELS:
+      return {
+        ...state,
+        isChannelsFetched: false,
+        getChannelsLoading: true,
+      };
+    case ChatsActionTypes.GET_TOPICS:
       return {
         ...state,
         isChannelsFetched: false,

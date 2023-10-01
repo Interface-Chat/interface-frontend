@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Button, Form, Input, UncontrolledTooltip } from "reactstrap";
 import { Link } from "react-router-dom";
+import Axios from "axios"; 
 // hooks
 import { useRedux } from "../../../hooks/index";
 
@@ -9,16 +10,14 @@ import { useRedux } from "../../../hooks/index";
 import {
   inviteContact,
   resetContacts,
-  getFavourites,
-  getDirectMessages,
   getChannels,
-  addContacts,
+  getTopics,
   createChannel,
   changeSelectedChat,
   getChatUserDetails,
   getChatUserConversations,
   getChannelDetails,
-  getArchiveContact,
+  getTopicDetails,
   readConversation,
 } from "../../../redux/actions";
 
@@ -37,16 +36,18 @@ import DirectMessages from "./DirectMessages";
 import Chanels from "./Chanels";
 import Archive from "./Archive";
 import { CHATS_TABS } from "../../../constants";
+import axios from "axios";
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
   // global store
   const { dispatch, useAppSelector } = useRedux();
-
+  let user;
   const {
     isContactInvited,
     favourites,
     directMessages,
+    topics,
     channels,
     isContactsAdded,
     isChannelCreated,
@@ -59,6 +60,7 @@ const Index = (props: IndexProps) => {
     isContactInvited: state.Contacts.isContactInvited,
     favourites: state.Chats.favourites,
     directMessages: state.Chats.directMessages,
+    topics: state.Chats.topics,
     channels: state.Chats.channels,
     isContactsAdded: state.Chats.isContactsAdded,
     isChannelCreated: state.Chats.isChannelCreated,
@@ -68,18 +70,38 @@ const Index = (props: IndexProps) => {
     isContactArchiveToggled: state.Chats.isContactArchiveToggled,
     chatUserDetails: state.Chats.chatUserDetails,
   }));
+
+  
+
+  const createNewTopic = (data: any) => {
+    // Replace 'your_api_endpoint' with the actual URL where you want to send the POST request
+    const apiUrl = 'your_api_endpoint';
+
+    // Data to be sent in the POST request
+    
+
+    axios
+      .post(apiUrl, data)
+      .then((response) => {
+        // Handle success, e.g., show a success message or redirect
+        console.log('Topic created successfully', response.data);
+      })
+      .catch((error) => {
+        // Handle error, e.g., show an error message
+        console.error('Error creating topic', error);
+      });
+  };
+
+  // let topics;
   /*
   get data
   */
-  useEffect(() => {
-    dispatch(getFavourites());
-    dispatch(getDirectMessages());
+  useEffect(() => {    
+    dispatch(getTopics());
     dispatch(getChannels());
   }, [dispatch]);
   useEffect(() => {
     if (isFavouriteContactToggled) {
-      dispatch(getFavourites());
-      dispatch(getDirectMessages());
     }
   }, [dispatch, isFavouriteContactToggled]);
 
@@ -109,25 +131,6 @@ const Index = (props: IndexProps) => {
     }
   }, [dispatch, isContactInvited]);
 
-  /*
-  contact add handeling
-  */
-  const [isOpenAddContact, setIsOpenAddContact] = useState<boolean>(false);
-  const openAddContactModal = () => {
-    setIsOpenAddContact(true);
-  };
-  const closeAddContactModal = () => {
-    setIsOpenAddContact(false);
-  };
-  const onAddContact = (contacts: Array<string | number>) => {
-    dispatch(addContacts(contacts));
-  };
-  useEffect(() => {
-    if (isContactsAdded) {
-      setIsOpenAddContact(false);
-      dispatch(getDirectMessages());
-    }
-  }, [dispatch, isContactsAdded]);
 
   /*
   channel creation handeling
@@ -143,9 +146,15 @@ const Index = (props: IndexProps) => {
   const onCreateChannel = (channelData: CreateChannelPostData) => {
     dispatch(createChannel(channelData));
   };
+  const onCreateTopic = (topicData: any) => {
+    
+  };
+
+  
   useEffect(() => {
     if (isChannelCreated) {
       setIsOpenCreateChannel(false);
+      dispatch(getTopics());
       dispatch(getChannels());
     }
   }, [dispatch, isChannelCreated]);
@@ -158,9 +167,8 @@ const Index = (props: IndexProps) => {
 
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
     if (isChannel) {
-      dispatch(getChannelDetails(id));
-    } else {
-      dispatch(getChatUserDetails(id));
+      // dispatch(getChannelDetails(id));
+      dispatch(getTopicDetails(id));
     }
     dispatch(readConversation(id));
     dispatch(getChatUserConversations(id));
@@ -175,21 +183,7 @@ const Index = (props: IndexProps) => {
     setActive(tab);
   };
 
-  /*
-  archive contacts
-  */
-  useEffect(() => {
-    dispatch(getArchiveContact());
-  }, [dispatch]);
-  useEffect(() => {
-    if (isContactArchiveToggled) {
-      dispatch(getArchiveContact());
-      dispatch(getFavourites());
-      dispatch(getDirectMessages());
-      dispatch(getChannels());
-      dispatch(getChatUserDetails(chatUserDetails.id));
-    }
-  }, [dispatch, isContactArchiveToggled, chatUserDetails.id]);
+
 
   //serach recent user
   const searchUsers = () => {
@@ -209,23 +203,35 @@ const Index = (props: IndexProps) => {
       }
   };
 
+  // useEffect(() => {
+  //   // Define your API URL here
+  //   const apiUrl = "http://localhost:3001/topics"; // Replace with your actual API URL
+
+  //   // Fetch data from the API
+  //   Axios.get(apiUrl)
+  //     .then((response) => {
+  //       // Assuming the API response contains an array of channels
+  //       const fetchedChannels = response;
+  //       topics = fetchedChannels;
+  //       // channels = fetchedChannels;
+  //       console.log(topics);
+        
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data from the API:", error);
+  //     });
+  // }, []);
+
   return (
     <>
+    
       <div>
         <div className="px-4 pt-4">
           <div className="d-flex align-items-start">
             <div className="flex-grow-1">
               <h4 className="mb-4">Chats</h4>
             </div>
-            <div className="flex-shrink-0">
-              <div id="add-contact">
-                {/* Button trigger modal */}
-                <AddButton onClick={openModal} />
-              </div>
-              <UncontrolledTooltip target="add-contact" placement="bottom">
-                Add Contact
-              </UncontrolledTooltip>
-            </div>
+            
           </div>
           <Form>
             <div className="input-group mb-3">
@@ -241,62 +247,22 @@ const Index = (props: IndexProps) => {
               </Button>
             </div>
           </Form>
-        </div>{" "}
+        </div>
         {/* .p-4 */}
         <AppSimpleBar className="chat-room-list">
           {/* Start chat-message-list */}
           {active === CHATS_TABS.DEFAULT && (
             <>
-              {/* favourite */}
-              <Favourites
-                users={favourites}
-                selectedChat={selectedChat}
-                onSelectChat={onSelectChat}
-              />
-
-              {/* direct messages */}
-              <DirectMessages
-                users={directMessages}
-                openAddContact={openAddContactModal}
-                selectedChat={selectedChat}
-                onSelectChat={onSelectChat}
-              />
 
               {/* channels list */}
               <Chanels
+              topics={topics}
                 channels={channels}
                 openCreateChannel={openCreateChannelModal}
                 selectedChat={selectedChat}
                 onSelectChat={onSelectChat}
               />
-              <h5 className="text-center mb-2">
-                <Link
-                  to="#"
-                  className="mb-3 px-4 mt-4 font-size-11 text-primary"
-                  onClick={() => onChangeTab(CHATS_TABS.ARCHIVE)}
-                >
-                  Archived Contacts{" "}
-                  <i className="bx bxs-archive-in align-middle" />
-                </Link>
-              </h5>
-            </>
-          )}
-          {active === CHATS_TABS.ARCHIVE && (
-            <>
-              <Archive
-                archiveContacts={archiveContacts}
-                selectedChat={selectedChat}
-                onSelectChat={onSelectChat}
-              />
-              <h5 className="text-center mb-2">
-                <Link
-                  to="#"
-                  className="mb-3 px-4 mt-4 font-size-11 text-primary"
-                  onClick={() => onChangeTab(CHATS_TABS.DEFAULT)}
-                >
-                  Chats <i className="bx bxs-archive-out align-middle" />
-                </Link>
-              </h5>
+              
             </>
           )}
 
@@ -313,21 +279,14 @@ const Index = (props: IndexProps) => {
       )}
 
       {/* add contact modal */}
-      {isOpen && (
+      {/* {isOpen && (
         <InviteContactModal
           isOpen={isOpen}
           onClose={closeModal}
           onInvite={onInviteContact}
         />
-      )}
+      )} */}
 
-      {isOpenAddContact && (
-        <ContactModal
-          isOpen={isOpenAddContact}
-          onClose={closeAddContactModal}
-          onAddContact={onAddContact}
-        />
-      )}
     </>
   );
 };

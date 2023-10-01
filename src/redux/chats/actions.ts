@@ -11,21 +11,12 @@ export const chatsApiResponseError = (actionType: string, error: string) => ({
   payload: { actionType, error },
 });
 
-export const getFavourites = () => ({
-  type: ChatsActionTypes.GET_FAVOURITES,
-});
-
-export const getDirectMessages = () => ({
-  type: ChatsActionTypes.GET_DIRECT_MESSAGES,
-});
-
 export const getChannels = () => ({
   type: ChatsActionTypes.GET_CHANNELS,
 });
 
-export const addContacts = (contacts: Array<string | number>) => ({
-  type: ChatsActionTypes.ADD_CONTACTS,
-  payload: contacts,
+export const getTopics = () => ({
+  type: ChatsActionTypes.GET_TOPICS,
 });
 
 export interface CreateChannelPostData {
@@ -104,17 +95,8 @@ export const getChannelDetails = (id: number | string) => ({
   payload: id,
 });
 
-export const toggleFavouriteContact = (id: number | string) => ({
-  type: ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
-  payload: id,
-});
-
-export const getArchiveContact = () => ({
-  type: ChatsActionTypes.GET_ARCHIVE_CONTACT,
-});
-
-export const toggleArchiveContact = (id: number | string) => ({
-  type: ChatsActionTypes.TOGGLE_ARCHIVE_CONTACT,
+export const getTopicDetails = (id: number | string) => ({
+  type: ChatsActionTypes.GET_TOPIC_DETAILS,
   payload: id,
 });
 

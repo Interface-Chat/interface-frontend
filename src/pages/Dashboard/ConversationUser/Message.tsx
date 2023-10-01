@@ -22,19 +22,19 @@ import {
 } from "../../../data/messages";
 
 // hooks
-import { useProfile } from "../../../hooks";
+// import { useProfile } from "../../../hooks";
 
 // utils
 import { formateDate } from "../../../utils";
 import RepliedMessage from "./RepliedMessage";
 
 interface MenuProps {
-  onDelete: () => any;
+  // onDelete: () => any;
   onReply: () => any;
   onForward: () => void;
 }
 
-const Menu = ({ onDelete, onReply, onForward }: MenuProps) => {
+const Menu = ({ onReply, onForward }: MenuProps) => {
   return (
     <UncontrolledDropdown className="align-self-start message-box-drop">
       <DropdownToggle className="btn btn-toggle" role="button" tag={"a"}>
@@ -75,7 +75,7 @@ const Menu = ({ onDelete, onReply, onForward }: MenuProps) => {
         </DropdownItem>
         <DropdownItem
           className="d-flex align-items-center justify-content-between delete-item"
-          onClick={onDelete}
+          // onClick={onDelete}
         >
           Delete <i className="bx bx-trash text-muted ms-2"></i>
         </DropdownItem>
@@ -291,59 +291,58 @@ const Typing = () => {
   );
 };
 interface MessageProps {
-  message: MessagesTypes;
-  chatUserDetails: any;
-  onDelete: (messageId: string | number) => any;
+  message: any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
   isFromMe: boolean;
   onOpenForward: (message: MessagesTypes) => void;
-  isChannel: boolean;
   onDeleteImage: (messageId: string | number, imageId: string | number) => void;
   // onSetReplyImageData: () => void;
 }
 const Message = ({
   message,
-  chatUserDetails,
-  onDelete,
   onSetReplyData,
   isFromMe,
   onOpenForward,
-  isChannel,
   onDeleteImage,
 }: MessageProps) => {
-  const { userProfile } = useProfile();
-  const hasImages = message.image && message.image.length;
-  const hasAttachments = message.attachments && message.attachments.length;
-  const hasText = message.text;
-  const isTyping = false;
+  // const { userProfile } = useProfile();
+  // const hasImages = message.image && message.image.length;
+  // const hasAttachments = message.attachments && message.attachments.length;
+  // const hasText = message.text;
+  // const isTyping = false;
+  const hasText = message.message && message.message.length;
+  const hasAttachments = message.attach && message.attach.length;
 
-  const chatUserFullName = chatUserDetails.firstName
-    ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-    : "-";
+  // const chatUserFullName = chatUserDetails.firstName
+  //   ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
+  //   : "-";
 
-  const myProfile = userProfile.profileImage
-    ? userProfile.profileImage
-    : imagePlaceholder;
-  const channeluserProfile =
-    message.meta.userData && message.meta.userData.profileImage
-      ? message.meta.userData.profileImage
-      : imagePlaceholder;
-  const chatUserprofile = chatUserDetails.profileImage
-    ? chatUserDetails.profileImage
-    : imagePlaceholder;
-  const profile = isChannel ? channeluserProfile : chatUserprofile;
-  const date = formateDate(message.time, "hh:mmaaa");
-  const isSent = message.meta.sent;
-  const isReceived = message.meta.received;
-  const isRead = message.meta.read;
-  const isForwarded = message.meta.isForwarded;
-  const channdelSenderFullname = message.meta.userData
-    ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
-    : "-";
-  const fullName = isChannel ? channdelSenderFullname : chatUserFullName;
-  const onDeleteMessage = () => {
-    onDelete(message.mId);
-  };
+  // const myProfile = userProfile.profileImage
+  //   ? userProfile.profileImage
+  //   : imagePlaceholder;
+  // const channeluserProfile =
+  //   message.meta.userData && message.meta.userData.profileImage
+  //     ? message.meta.userData.profileImage
+  //     : imagePlaceholder;
+  // const chatUserprofile = chatUserDetails.profileImage
+  //   ? chatUserDetails.profileImage
+  //   : imagePlaceholder;
+  // const profile = isChannel ? channeluserProfile : chatUserprofile;
+  const date = formateDate(message.created_at, "dd - hh:mmaaa");
+  // const isSent = message.meta.sent;
+  // const isReceived = message.meta.received;
+  // const isRead = message.meta.read;
+  // const isForwarded = message.meta.isForwarded;
+  // const channdelSenderFullname = message.meta.userData
+  //   ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
+  //   : "-";
+  // const fullName = isChannel ? channdelSenderFullname : chatUserFullName;
+  const senderName = message.user.username;
+  // console.log(senderName);
+  
+  // const onDeleteMessage = () => {
+  //   onDelete(message.mId);
+  // };
 
   const onClickReply = () => {
     onSetReplyData(message);
@@ -354,9 +353,9 @@ const Message = ({
     onOpenForward(message);
   };
 
-  const onDeleteImg = (imageId: number | string) => {
-    onDeleteImage(message.mId, imageId);
-  };
+  // const onDeleteImg = (imageId: number | string) => {
+  //   onDeleteImage(message.mId, imageId);
+  // };
   return (
     <li
       className={classnames(
@@ -367,18 +366,18 @@ const Message = ({
     >
       <div className="conversation-list">
         <div className="chat-avatar">
-          <img src={isFromMe ? myProfile : profile} alt="" />
+          {/* <img src={isFromMe ? myProfile : profile} alt="" /> */}
         </div>
 
         <div className="user-chat-content">
-          {hasImages && message.text && (
+          {message.text && (
             <div className="ctext-wrap">
               <div className="ctext-wrap-content">
                 <p className="mb-0 ctext-content">{message.text}</p>
               </div>
             </div>
           )}
-          {isForwarded && (
+          {/* {isForwarded && (
             <span
               className={classnames(
                 "me-1",
@@ -398,44 +397,33 @@ const Message = ({
               ></i>
               Forwarded
             </span>
-          )}
+          )} */}
 
           <div className="ctext-wrap">
             {/* text message end */}
 
             {/* image message start */}
-            {hasImages ? (
-              <>
-                <Images images={message.image!} message={message} onSetReplyData={onSetReplyData} onDeleteImg={onDeleteImg} />
-              </>
-            ) : (
+            {(
               <>
                 <div className="ctext-wrap-content">
-                  {isRepliedMessage && (
-                    <RepliedMessage
-                      fullName={fullName}
-                      message={message}
-                      isFromMe={isFromMe}
-                    />
-                  )}
 
                   {hasText && (
-                    <p className="mb-0 ctext-content">{message.text}</p>
+                    <p className="mb-0 ctext-content">{message.message}</p>
                   )}
 
                   {/* typing start */}
-                  {isTyping && <Typing />}
+                  
 
                   {/* typing end */}
                   {/* files message start */}
                   {hasAttachments && (
-                    <Attachments attachments={message.attachments} />
+                    <Attachments attachments={message.attach} />
                   )}
                   {/* files message end */}
                 </div>
                 <Menu
                   onForward={onForwardMessage}
-                  onDelete={onDeleteMessage}
+                  // onDelete={onDeleteMessage}
                   onReply={onClickReply}
                 />
               </>
@@ -444,9 +432,10 @@ const Message = ({
             {/* image message end */}
           </div>
           <div className="conversation-name">
-            {isFromMe ? (
+            {
+            isFromMe ? (
               <>
-                <span
+                {/* <span
                   className={classnames(
                     "me-1",
                     { "text-success": isRead },
@@ -460,15 +449,16 @@ const Message = ({
                       { "bx-check": isSent }
                     )}
                   ></i>
-                </span>
+                </span> */}
                 <small className={classnames("text-muted", "mb-0", "me-2")}>
                   {date}
                 </small>
                 You
               </>
-            ) : (
+            ) : 
+            (
               <>
-                {fullName}
+                {senderName}
                 <small className={classnames("text-muted", "mb-0", "ms-2")}>
                   {date}
                 </small>

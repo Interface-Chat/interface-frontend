@@ -10,6 +10,7 @@ import { useContacts } from "../../../hooks";
 // actions
 import {
   getChannelDetails,
+  getTopicDetails,
   getChatUserDetails,
   getChatUserConversations,
   changeSelectedChat,
@@ -61,6 +62,7 @@ const Member = ({ member , newIndex}: GroupProps) => {
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
     if (isChannel) {
       dispatch(getChannelDetails(id));
+      dispatch(getTopicDetails(id));
     } else {
       dispatch(getChatUserDetails(id));
     }

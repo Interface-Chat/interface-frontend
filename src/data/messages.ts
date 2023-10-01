@@ -40,7 +40,7 @@ export interface ConversationTypes {
   messages: MessagesTypes[];
 }
 
-export const myId = myData.uid;
+export const myId = myData[0].uid;
 let conversations: ConversationTypes[] = [
   {
     conversationId: 1,

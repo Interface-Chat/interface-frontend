@@ -9,6 +9,8 @@ import { getLoggedinUser } from "../api/apiCore";
 //utils
 import { divideByKey } from "../utils";
 
+import { getTopicDetails } from "../api";
+
 const useProfile = () => {
   // global store
   const { useAppSelector } = useRedux();

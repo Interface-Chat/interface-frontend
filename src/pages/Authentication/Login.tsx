@@ -9,9 +9,6 @@ import {
   UncontrolledTooltip,
 } from "reactstrap";
 
-//Social Media Imports
-import { GoogleLogin } from "react-google-login";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 // router
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
@@ -96,33 +93,8 @@ const Login = (props: LoginProps) => {
     return <Navigate to={{ pathname: redirectUrl }} />;
   }
 
-  const signIn = (res: any, type: "google" | "facebook") => {
-    if (type === "google" && res) {
-      const postData = {
-        name: res.profileObj.name,
-        email: res.profileObj.email,
-        token: res.tokenObj.access_token,
-        idToken: res.tokenId,
-      };
-      dispatch(socialLogin(postData, type));
-    } else if (type === "facebook" && res) {
-      const postData = {
-        name: res.name,
-        token: res.accessToken,
-      };
-      dispatch(socialLogin(postData, type));
-    }
-  };
 
-  //handleFacebookLoginResponse
-  const facebookResponse = (response: object) => {
-    signIn(response, "facebook");
-  };
 
-  //handleGoogleLoginResponse
-  const googleResponse = (response: object) => {
-    signIn(response, "google");
-  };
 
   return (
     <NonAuthLayoutWrapper>
@@ -155,7 +127,7 @@ const Login = (props: LoginProps) => {
                 />
               </div>
 
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <FormInput
                   label="Password"
                   type="password"
@@ -167,7 +139,7 @@ const Login = (props: LoginProps) => {
                   className="form-control pe-5"
                   placeholder="Enter Password"
                 />
-              </div>
+              </div> */}
 
               <div className="form-check form-check-info font-size-16">
                 <input
@@ -189,73 +161,6 @@ const Login = (props: LoginProps) => {
                 </Button>
               </div>
 
-              <div className="mt-4 text-center">
-                <div className="signin-other-title">
-                  <h5 className="font-size-14 mb-4 title">Sign in with</h5>
-                </div>
-                <Row className="">
-                  <div className="col-4">
-                    <div>
-                      <FacebookLogin
-                        appId={config.FACEBOOK.APP_ID}
-                        autoLoad={false}
-                        callback={facebookResponse}
-                        render={(renderProps: any) => (
-                          <button
-                            type="button"
-                            className="btn btn-light w-100"
-                            id="facebook"
-                            onClick={renderProps.onClick}
-                          >
-                            <i className="mdi mdi-facebook text-indigo"></i>
-                          </button>
-                        )}
-                      />
-                    </div>
-                    <UncontrolledTooltip placement="top" target="facebook">
-                      Facebook
-                    </UncontrolledTooltip>
-                  </div>
-                  <div className="col-4">
-                    <div>
-                      <button
-                        type="button"
-                        className="btn btn-light w-100"
-                        id="twitter"
-                      >
-                        <i className="mdi mdi-twitter text-info"></i>
-                      </button>
-                    </div>
-                    <UncontrolledTooltip placement="top" target="twitter">
-                      Twitter
-                    </UncontrolledTooltip>
-                  </div>
-                  <div className="col-4">
-                    <div>
-                      <GoogleLogin
-                        clientId={
-                          config.GOOGLE.CLIENT_ID ? config.GOOGLE.CLIENT_ID : ""
-                        }
-                        render={renderProps => (
-                          <button
-                            type="button"
-                            className="btn btn-light w-100"
-                            id="google"
-                            onClick={renderProps.onClick}
-                          >
-                            <i className="mdi mdi-google text-danger"></i>
-                          </button>
-                        )}
-                        onSuccess={googleResponse}
-                        onFailure={() => {}}
-                      />
-                    </div>
-                    <UncontrolledTooltip placement="top" target="google">
-                      Google
-                    </UncontrolledTooltip>
-                  </div>
-                </Row>
-              </div>
             </Form>
 
             <div className="mt-5 text-center text-muted">

@@ -14,6 +14,14 @@ const getChannels = () => {
   return api.get(url.GET_CHANNELS);
 };
 
+const getTopics = () => {
+  return api.get("http://localhost:3001/topics");
+};
+
+const getTopicDetails = async (id: string | number) => {
+  return await api.get("http://localhost:3001/topics/" + id, { params: { id } });
+};
+
 const addContacts = (contacts: Array<string | number>) => {
   return api.create(url.ADD_CONTACTS, contacts);
 };
@@ -117,9 +125,11 @@ export {
   forwardMessage,
   deleteUserMessages,
   getChannelDetails,
+  getTopicDetails,
   toggleFavouriteContact,
   getArchiveContact,
   toggleArchiveContact,
   readConversation,
   deleteImage,
+  getTopics,
 };

@@ -4,16 +4,16 @@ import DefaultLayout from "../layouts/Default/index";
 
 // layouts
 import NonAuthLayout from "../layouts/NonAuth/index";
-import { AuthProtected } from "./AuthProtected";
+// import { AuthProtected } from "./AuthProtected";
 
-import { publicRoutes, privateRoutes } from "./allRoutes";
+import { privateRoutes } from "./allRoutes";
 
 const Index = (props: any) => {
 
   return (
     <React.Fragment>
       <Routes>
-        <Route>
+        {/* <Route>
               {publicRoutes.map((route : any, idx :  number) => (
                 <Route
                   path={route.path}
@@ -25,18 +25,18 @@ const Index = (props: any) => {
                   key={idx}
                 />
               ))}
-        </Route>
+        </Route> */}
 
         <Route>
               {privateRoutes.map((route, idx) => (
                 <Route
                   path={route.path}
                   element={
-                    <AuthProtected>
+                    
                       <DefaultLayout>
                       {route.component}
                       </DefaultLayout>
-                    </AuthProtected>
+                    
                   }
                   key={idx}
                   // exact={true}

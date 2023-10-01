@@ -7,9 +7,7 @@ import { useRedux } from "../../../hooks/index";
 // actions
 import {
   toggleUserDetailsTab,
-  toggleFavouriteContact,
   getChatUserDetails,
-  toggleArchiveContact,
 } from "../../../redux/actions";
 
 // components
@@ -80,19 +78,6 @@ const Index = ({ isChannel }: IndexProps) => {
     setIsOpenAudioModal(false);
   };
 
-  /*
-  favourite
-  */
-  const onToggleFavourite = () => {
-    dispatch(toggleFavouriteContact(chatUserDetails.id));
-  };
-
-  /*
-  archive
-  */
-  const onToggleArchive = () => {
-    dispatch(toggleArchiveContact(chatUserDetails.id));
-  };
 
   return (
     <>
@@ -116,27 +101,9 @@ const Index = ({ isChannel }: IndexProps) => {
           <AppSimpleBar className="p-4 user-profile-desc">
             {" "}
             {/* simplebar */}
-            <Actions
-              chatUserDetails={chatUserDetails}
-              onOpenVideo={onOpenVideo}
-              onOpenAudio={onOpenAudio}
-              onToggleFavourite={onToggleFavourite}
-              onToggleArchive={onToggleArchive}
-            />
+
             <Status about={chatUserDetails.about} />
-            {!isChannel ? (
-              <>
-                <BasicDetails chatUserDetails={chatUserDetails} />
-                <hr className="my-4" />
-                <Groups chatUserDetails={chatUserDetails} />
-                <hr className="my-4" />
-              </>
-            ) : (
-              <>
-                <Members chatUserDetails={chatUserDetails} />
-                <hr className="my-4" />
-              </>
-            )}
+            
             <Media media={chatUserDetails.media} limit={3} />
             <hr className="my-4" />
             <AttachedFiles attachedFiles={chatUserDetails.attachedFiles} />

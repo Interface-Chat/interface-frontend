@@ -31,34 +31,41 @@ import { changeSelectedChat } from "../../../redux/actions";
 // constants
 import { STATUS_TYPES } from "../../../constants";
 interface ProfileImageProps {
-  chatUserDetails: any;
+  topic: any;
+  chatTopicDetails: any;
   onCloseConversation: () => any;
-  onOpenUserDetails: () => any;
-  isChannel: boolean;
+  // onOpenUserDetails: () => any;
 }
 const ProfileImage = ({
-  chatUserDetails,
+  topic,
+  chatTopicDetails,
   onCloseConversation,
-  onOpenUserDetails,
-  isChannel,
+  // onOpenUserDetails,
 }: ProfileImageProps) => {
   // const fullName = !isChannel
   //   ? chatUserDetails.firstName
   //     ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
   //     : "-"
   //   : chatUserDetails.name;
-  const fullName = !isChannel 
-  ? 
-  chatUserDetails.firstName ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}` : "-"
-  : 
-  chatUserDetails.name;
-  const shortName = !isChannel
-  ? chatUserDetails.firstName
-  ? `${chatUserDetails.firstName.charAt(
-    0
-    )}${chatUserDetails.lastName.charAt(0)}`
-    : "-"
-    : "#";
+  
+  
+  const topicName = chatTopicDetails?.title;
+  // console.log(chatTopicDetails);
+  
+  // const fullName = !isChannel 
+  // ? 
+  // chatUserDetails.firstName ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}` : "-"
+  // : 
+  // chatUserDetails.name;
+  // const shortName = !isChannel
+  // ? chatUserDetails.firstName
+  // ? `${chatUserDetails.firstName.charAt(
+  //   0
+  //   )}${chatUserDetails.lastName.charAt(0)}`
+  //   : "-"
+  //   : "#";
+
+  
 
   const colors = [
     "bg-primary",
@@ -71,10 +78,7 @@ const ProfileImage = ({
   ];
   const [color] = useState(Math.floor(Math.random() * colors.length));
 
-  const isOnline =
-    chatUserDetails.status && chatUserDetails.status === STATUS_TYPES.ACTIVE;
-
-  const members = (chatUserDetails.members || []).length;
+  
   return (
     <div className="d-flex align-items-center">
       <div className="flex-shrink-0 d-block d-lg-none me-2">
@@ -95,35 +99,10 @@ const ProfileImage = ({
               "align-self-center",
               "me-3",
               "ms-0",
-              { online: isOnline }
+              
             )}
           >
-            {chatUserDetails.profileImage ? (
-              <>
-                <img
-                  src={chatUserDetails.profileImage}
-                  className="rounded-circle avatar-sm"
-                  alt=""
-                />
-                <span
-                  className={classnames(
-                    "user-status",
-                    {
-                      "bg-success":
-                        chatUserDetails.status === STATUS_TYPES.ACTIVE,
-                    },
-                    {
-                      "bg-warning":
-                        chatUserDetails.status === STATUS_TYPES.AWAY,
-                    },
-                    {
-                      "bg-danger":
-                        chatUserDetails.status === STATUS_TYPES.DO_NOT_DISTURB,
-                    }
-                  )}
-                ></span>
-              </>
-            ) : (
+            {(
               <div className="avatar-sm align-self-center">
                 <span
                   className={classnames(
@@ -134,7 +113,7 @@ const ProfileImage = ({
                     colors[color]
                   )}
                 >
-                  <span className="username"> {shortName}</span>
+                  <span className="username"> ##</span>
                   <span className="user-status"></span>
                 </span>
               </div>
@@ -144,19 +123,13 @@ const ProfileImage = ({
             <h6 className="text-truncate mb-0 font-size-18">
               <Link
                 to="#"
-                onClick={onOpenUserDetails}
+                // onClick={onOpenUserDetails}
                 className="user-profile-show text-reset"
               >
-                {fullName}
+                {topic?.title}
               </Link>
             </h6>
-            <p className="text-truncate text-muted mb-0">
-              {isChannel ? (
-                <small>{members} Members</small>
-              ) : (
-                <small>{chatUserDetails.status}</small>
-              )}
-            </p>
+
           </div>
         </div>
       </div>
@@ -190,14 +163,12 @@ interface MoreProps {
   onOpenVideo: () => void;
   onDelete: () => void;
   isArchive: boolean;
-  onToggleArchive: () => void;
 }
 const More = ({
   onOpenAudio,
   onOpenVideo,
   onDelete,
   isArchive,
-  onToggleArchive,
 }: MoreProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -231,21 +202,6 @@ const More = ({
         <DropdownItem
           className="d-flex justify-content-between align-items-center"
           to="#"
-          onClick={onToggleArchive}
-        >
-          {isArchive ? (
-            <>
-              Un-Archive <i className="bx bx-archive-out text-muted"></i>
-            </>
-          ) : (
-            <>
-              Archive <i className="bx bx-archive text-muted"></i>
-            </>
-          )}
-        </DropdownItem>
-        <DropdownItem
-          className="d-flex justify-content-between align-items-center"
-          to="#"
         >
           Muted <i className="bx bx-microphone-off text-muted"></i>
         </DropdownItem>
@@ -264,53 +220,50 @@ const More = ({
 interface PinnedAlertProps {
   onOpenPinnedTab: () => void;
 }
-const PinnedAlert = ({ onOpenPinnedTab }: PinnedAlertProps) => {
-  const [visible, setVisible] = useState(true);
+// const PinnedAlert = ({ onOpenPinnedTab }: PinnedAlertProps) => {
+//   const [visible, setVisible] = useState(true);
 
-  const onDismiss = () => setVisible(false);
+//   const onDismiss = () => setVisible(false);
 
-  return (
-    <Alert
-      color="warning"
-      isOpen={visible}
-      toggle={onDismiss}
-      className="topbar-bookmark p-1 px-3 px-lg-4 pe-lg-5 pe-5 alert-dismiss-custom"
-      role="alert"
-    >
-      <div className="d-flex align-items-start bookmark-tabs">
-        <div className="tab-list-link">
-          <Link to="#" className="tab-links" onClick={onOpenPinnedTab}>
-            <i className="ri-pushpin-fill align-middle me-1"></i> 10 Pinned
-          </Link>
-        </div>
-        <div id="add-bookmark">
-          <Link to="#" className="tab-links border-0 px-3">
-            <i className="ri-add-fill align-middle"></i>
-          </Link>
-        </div>
-        <UncontrolledTooltip target="add-bookmark" placement="bottom">
-          Add Bookmark
-        </UncontrolledTooltip>
-      </div>
-    </Alert>
-  );
-};
+//   return (
+//     <Alert
+//       color="warning"
+//       isOpen={visible}
+//       toggle={onDismiss}
+//       className="topbar-bookmark p-1 px-3 px-lg-4 pe-lg-5 pe-5 alert-dismiss-custom"
+//       role="alert"
+//     >
+//       <div className="d-flex align-items-start bookmark-tabs">
+//         <div className="tab-list-link">
+//           <Link to="#" className="tab-links" onClick={onOpenPinnedTab}>
+//             <i className="ri-pushpin-fill align-middle me-1"></i> 10 Pinned
+//           </Link>
+//         </div>
+//         <div id="add-bookmark">
+//           <Link to="#" className="tab-links border-0 px-3">
+//             <i className="ri-add-fill align-middle"></i>
+//           </Link>
+//         </div>
+//         <UncontrolledTooltip target="add-bookmark" placement="bottom">
+//           Add Bookmark
+//         </UncontrolledTooltip>
+//       </div>
+//     </Alert>
+//   );
+// };
 interface UserHeadProps {
-  chatUserDetails: any;
-  pinnedTabs: Array<PinTypes>;
-  onOpenUserDetails: () => void;
-  onDelete: () => void;
-  isChannel: boolean;
-  onToggleArchive: () => void;
+  topic: any;
+  chatTopicDetails: any;
+  
+  
 }
 const UserHead = ({
-  chatUserDetails,
-  pinnedTabs,
-  onOpenUserDetails,
-  onDelete,
-  isChannel,
-  onToggleArchive,
+  topic,
+  chatTopicDetails,
+
+  
 }: UserHeadProps) => {
+  
   // global store
   const { dispatch } = useRedux();
   /*
@@ -359,10 +312,11 @@ const UserHead = ({
       <Row className="align-items-center">
         <Col sm={4} className="col-8">
           <ProfileImage
-            chatUserDetails={chatUserDetails}
+          topic={topic}
+            chatTopicDetails={chatTopicDetails}
             onCloseConversation={onCloseConversation}
-            onOpenUserDetails={onOpenUserDetails}
-            isChannel={isChannel}
+            // onOpenUserDetails={onOpenUserDetails}
+            
           />
         </Col>
         <Col sm={8} className="col-4">
@@ -371,35 +325,9 @@ const UserHead = ({
               <Search />
             </li>
 
-            {!isChannel && (
-              <>
-                <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenAudio}
-                  >
-                    <i className="bx bxs-phone-call"></i>
-                  </Button>
-                </li>
-
-                <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
-                  <Button
-                    type="button"
-                    color="none"
-                    className="btn nav-btn"
-                    onClick={onOpenVideo}
-                  >
-                    <i className="bx bx-video"></i>
-                  </Button>
-                </li>
-              </>
-            )}
-
             <li className="list-inline-item d-none d-lg-inline-block me-2 ms-0">
               <button
-                onClick={onOpenUserDetails}
+                // onClick={onOpenUserDetails}
                 type="button"
                 className="btn nav-btn user-profile-show"
               >
@@ -407,40 +335,11 @@ const UserHead = ({
               </button>
             </li>
 
-            <li className="list-inline-item">
-              <More
-                onOpenAudio={onOpenAudio}
-                onOpenVideo={onOpenVideo}
-                onDelete={onDelete}
-                isArchive={chatUserDetails.isArchived}
-                onToggleArchive={onToggleArchive}
-              />
-            </li>
           </ul>
         </Col>
       </Row>
-      <PinnedAlert onOpenPinnedTab={onOpenPinnedTab} />
-      {isOpenAudioModal && (
-        <AudioCallModal
-          isOpen={isOpenAudioModal}
-          onClose={onCloseAudio}
-          user={chatUserDetails}
-        />
-      )}
-      {isOpenVideoModal && (
-        <VideoCallModal
-          isOpen={isOpenVideoModal}
-          onClose={onCloseVideo}
-          user={chatUserDetails}
-        />
-      )}
-      {isOpenPinnedTabModal && (
-        <AddPinnedTabModal
-          isOpen={isOpenPinnedTabModal}
-          onClose={onClosePinnedTab}
-          pinnedTabs={pinnedTabs}
-        />
-      )}
+      {/* <PinnedAlert onOpenPinnedTab={onOpenPinnedTab} /> */}
+
     </div>
   );
 };

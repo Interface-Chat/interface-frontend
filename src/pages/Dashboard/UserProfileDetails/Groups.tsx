@@ -7,6 +7,7 @@ import { useRedux } from "../../../hooks/index";
 // actions
 import {
   getChannelDetails,
+  getTopicDetails,
   getChatUserDetails,
   getChatUserConversations,
   changeSelectedChat,
@@ -22,6 +23,7 @@ const Group = ({ group }: GroupProps) => {
   const onSelectChat = (id: string | number, isChannel?: boolean) => {
     if (isChannel) {
       dispatch(getChannelDetails(id));
+      dispatch(getTopicDetails(id));
     } else {
       dispatch(getChatUserDetails(id));
     }

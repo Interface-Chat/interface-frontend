@@ -5,6 +5,7 @@ export enum ChatsActionTypes {
   GET_FAVOURITES = "@@chats/GET_FAVOURITES",
   GET_DIRECT_MESSAGES = "@@chats/GET_DIRECT_MESSAGES",
   GET_CHANNELS = "@@chats/GET_CHANNELS",
+  GET_TOPICS = "@@chats/GET_TOPICS",
 
   ADD_CONTACTS = "@@chats/ADD_CONTACTS",
   CREATE_CHANNEL = "@@chats/CREATE_CHANNEL",
@@ -22,6 +23,7 @@ export enum ChatsActionTypes {
   FORWARD_MESSAGE = "@@chats/FORWARD_MESSAGE",
   DELETE_USER_MESSAGES = "@@chats/DELETE_USER_MESSAGES",
   GET_CHANNEL_DETAILS = "@@chats/GET_CHANNEL_DETAILS",
+  GET_TOPIC_DETAILS = "@@chats/GET_TOPIC_DETAILS",
   TOGGLE_FAVOURITE_CONTACT = "@@chats/TOGGLE_FAVOURITE_CONTACT",
   GET_ARCHIVE_CONTACT = "@@chats/GET_ARCHIVE_CONTACT",
   TOGGLE_ARCHIVE_CONTACT = "@@chats/TOGGLE_ARCHIVE_CONTACT",
@@ -32,8 +34,10 @@ export enum ChatsActionTypes {
 export interface ChatsState {
   favourites: Array<any>;
   directMessages: Array<any>;
+  topics: Array<any>;
   channels: Array<any>;
   selectedChat: string | number | null;
+  topicDetails: object;
   chatUserDetails: object;
   chatUserConversations: {};
   isOpenUserDetails: boolean;

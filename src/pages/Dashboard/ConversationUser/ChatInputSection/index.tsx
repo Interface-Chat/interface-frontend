@@ -13,15 +13,15 @@ import { MessagesTypes } from "../../../../data/messages";
 
 interface IndexProps {
   onSend: (data: any) => void;
-  replyData: null | MessagesTypes | undefined;
-  onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
-  chatUserDetails: any;
+  // replyData: null | MessagesTypes | undefined;
+  // onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
+  // chatUserDetails: any;
 }
 const Index = ({
   onSend,
-  replyData,
-  onSetReplyData,
-  chatUserDetails,
+  // replyData,
+  // onSetReplyData,
+  // chatUserDetails,
 }: IndexProps) => {
   /*
   more menu collapse
@@ -95,6 +95,8 @@ const Index = ({
       });
       data["attachments"] = fs;
     }
+    // console.log(data);
+    
 
     setText("");
     setImages(null);
@@ -157,11 +159,10 @@ const Index = ({
         onToggle={onToggle}
       />
   
-      <Reply
+      {/* <Reply
         reply={replyData}
         onSetReplyData={onSetReplyData}
-        chatUserDetails={chatUserDetails}
-      />
+      /> */}
     </div>
   );
 };

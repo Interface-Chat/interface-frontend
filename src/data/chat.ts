@@ -65,6 +65,9 @@ let directMessages: Array<UserTypes> = [
 const onChangeDirectMessages = (newData: Array<UserTypes>) => {
   directMessages = newData;
 };
+
+// List Channel
+
 export interface ChannelTypes {
   id: number | string;
   name: string;
@@ -90,6 +93,9 @@ let channels: Array<ChannelTypes> = [
   },
   {
     ...userChannels[3],
+  },
+  {
+    ...userChannels[4],
   },
 ];
 

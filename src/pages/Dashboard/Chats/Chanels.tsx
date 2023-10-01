@@ -1,31 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { UncontrolledTooltip } from "reactstrap";
+// Import Axios for making HTTP requests
 
-// interface
-import { ChannelTypes } from "../../../data/chat";
 
 // components
 import AddButton from "../../../components/AddButton";
 import ChatChannel from "./ChatChannel";
 
 interface ChanelsProps {
-  channels: Array<ChannelTypes>;
+  topics: any;
+  channels: Array<any>;
   openCreateChannel: () => void;
   selectedChat: string | number;
   onSelectChat: (id: number | string, isChannel?: boolean) => void;
 }
+
+
 const Chanels = ({
+  topics,
   channels,
   openCreateChannel,
   selectedChat,
   onSelectChat,
 }: ChanelsProps) => {
+  
+  
+
+
   return (
     <>
       <div className="d-flex align-items-center px-4 mt-5 mb-2">
         <div className="flex-grow-1">
           <h4 className="mb-0 font-size-11 text-muted text-uppercase">
-            Channels
+            Topics
           </h4>
         </div>
         <div className="flex-shrink-0">
@@ -35,15 +42,15 @@ const Chanels = ({
             {/* addgroup-exampleModal */}
           </div>
           <UncontrolledTooltip target="create-group" placement="bottom">
-            Create group
+            Create Topic
           </UncontrolledTooltip>
         </div>
       </div>
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list mb-3">
-          {(channels || []).map((channel: ChannelTypes, key: number) => (
+          {(topics || []).map((topic: any, key: number) => (
             <ChatChannel
-              channel={channel}
+              channel={topic}
               key={key}
               selectedChat={selectedChat}
               onSelectChat={onSelectChat}

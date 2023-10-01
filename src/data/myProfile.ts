@@ -115,13 +115,20 @@ const profileDetails: ProfileDetailsTypes = {
 let user: any = localStorage.getItem("authUser");
 user = JSON.parse(user);
 
-const myData = {
+// const myData = {
+//   uid: user && user.uid ? user.uid : 1,
+//   username: "admin",
+//   role: "admin",
+//   password: "123456",
+//   email: profileDetails.basicDetails.email,
+//   profileImage: profileDetails.basicDetails.avatar,
+// };
+
+const myData = [{
   uid: user && user.uid ? user.uid : 1,
   username: "admin",
-  role: "admin",
   password: "123456",
-  email: profileDetails.basicDetails.email,
-  profileImage: profileDetails.basicDetails.avatar,
-};
+},
+];
 
 export { profileDetails, myData };

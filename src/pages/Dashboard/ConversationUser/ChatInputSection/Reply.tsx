@@ -11,9 +11,9 @@ import { useProfile } from "../../../../hooks";
 interface ReplyProps {
   reply: null | MessagesTypes | undefined;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
-  chatUserDetails: any;
+  
 }
-const Reply = ({ reply, onSetReplyData, chatUserDetails }: ReplyProps) => {
+const Reply = ({ reply, onSetReplyData }: ReplyProps) => {
   /*
   collapse handeling
   */
@@ -28,9 +28,7 @@ const Reply = ({ reply, onSetReplyData, chatUserDetails }: ReplyProps) => {
 
   const { userProfile } = useProfile();
 
-  const replyUserName = chatUserDetails.firstName
-    ? `${chatUserDetails.firstName} ${chatUserDetails.lastName}`
-    :reply && reply.meta.userData?.firstName;
+
   const isReplyFromMe =
     reply && reply.meta.sender + "" === userProfile.uid + "";
 
@@ -41,7 +39,7 @@ const Reply = ({ reply, onSetReplyData, chatUserDetails }: ReplyProps) => {
           <div className="replymessage-block mb-0 d-flex align-items-start">
             <div className="flex-grow-1">
               <h5 className="conversation-name">
-                {isReplyFromMe ? "You" : replyUserName}
+                
               </h5>
               {reply?.text && <p className="mb-0">{reply?.text}</p>}
 

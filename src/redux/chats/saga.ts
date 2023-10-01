@@ -8,6 +8,8 @@ import {
   getFavourites as getFavouritesApi,
   getDirectMessages as getDirectMessagesApi,
   getChannels as getChannelsApi,
+  getTopics as getTopicsApi,
+  getTopicDetails as getTopicDetailsApi,
   addContacts as addContactsApi,
   createChannel as createChannelApi,
   getChatUserDetails as getChatUserDetailsApi,
@@ -34,9 +36,8 @@ import {
 
 //actions
 import {
-  getDirectMessages as getDirectMessagesAction,
-  getFavourites as getFavouritesAction,
   getChannels as getChannelsAction,
+  getTopics as getTopicsAction,
 } from "./actions";
 
 function* getFavourites() {
@@ -69,6 +70,15 @@ function* getChannels() {
     yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_CHANNELS, response));
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.GET_CHANNELS, error));
+  }
+}
+
+function* getTopics() {
+  try {
+    const response: Promise<any> = yield call(getTopicsApi);
+    yield put(chatsApiResponseSuccess(ChatsActionTypes.GET_TOPICS, response));
+  } catch (error: any) {
+    yield put(chatsApiResponseError(ChatsActionTypes.GET_TOPICS, error));
   }
 }
 
@@ -227,6 +237,19 @@ function* getChannelDetails({ payload: id }: any) {
   }
 }
 
+function* getTopicDetails({ payload: id }: any) {
+  try {
+    const response: Promise<any> = yield call(getTopicDetailsApi, id);
+    yield put(
+      chatsApiResponseSuccess(ChatsActionTypes.GET_TOPIC_DETAILS, response)
+    );
+  } catch (error: any) {
+    yield put(
+      chatsApiResponseError(ChatsActionTypes.GET_TOPIC_DETAILS, error)
+    );
+  }
+}
+
 function* toggleFavouriteContact({ payload: id }: any) {
   try {
     const response: Promise<any> = yield call(toggleFavouriteContactApi, id);
@@ -279,9 +302,8 @@ function* readConversation({ payload: id }: any) {
     yield put(
       chatsApiResponseSuccess(ChatsActionTypes.READ_CONVERSATION, response)
     );
-    yield put(getDirectMessagesAction());
-    yield put(getFavouritesAction());
     yield put(getChannelsAction());
+    yield put(getTopicsAction());
   } catch (error: any) {
     yield put(chatsApiResponseError(ChatsActionTypes.READ_CONVERSATION, error));
   }
@@ -311,6 +333,11 @@ export function* watchGetDirectMessages() {
 export function* watchGetChannels() {
   yield takeEvery(ChatsActionTypes.GET_CHANNELS, getChannels);
 }
+
+export function* watchGetTopics() {
+  yield takeEvery(ChatsActionTypes.GET_TOPICS, getTopics);
+}
+
 export function* watchAddContacts() {
   yield takeEvery(ChatsActionTypes.ADD_CONTACTS, addContacts);
 }
@@ -353,6 +380,9 @@ export function* watchDeleteUserMessages() {
 export function* watchGetChannelDetails() {
   yield takeEvery(ChatsActionTypes.GET_CHANNEL_DETAILS, getChannelDetails);
 }
+export function* watchGetTopicDetails() {
+  yield takeEvery(ChatsActionTypes.GET_CHANNEL_DETAILS, getTopicDetails);
+}
 export function* watchToggleFavouriteContact() {
   yield takeEvery(
     ChatsActionTypes.TOGGLE_FAVOURITE_CONTACT,
@@ -380,6 +410,7 @@ function* chatsSaga() {
     fork(watchGetFavourites),
     fork(watchGetDirectMessages),
     fork(watchGetChannels),
+    fork(watchGetTopics),
     fork(watchAddContacts),
     fork(watchCreateChannel),
     fork(watchGetChatUserDetails),

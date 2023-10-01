@@ -74,6 +74,12 @@ let userChannels: ChannelDataTypes[] = [
     name: "Reporting",
     members: [{ ...contacts[0] }, { ...contacts[1] }],
   },
+
+  {
+    id: "2",
+    name: "testing",
+    members: [],
+  },
 ];
 
 const onChangeUserChannels = (newData: Array<ChannelDataTypes>) => {

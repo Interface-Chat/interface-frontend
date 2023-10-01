@@ -16,26 +16,26 @@ import Message from "./Message";
 import { MessagesTypes } from "../../../data/messages";
 import ForwardModal from "../../../components/ForwardModal";
 
+
 // actions
 import { forwardMessage, deleteImage } from "../../../redux/actions";
 interface ConversationProps {
-  chatUserConversations: any;
-  chatUserDetails: any;
-  onDelete: (messageId: string | number) => any;
+  user: any;
+  topic: any;
+  socket: any;
   onSetReplyData: (reply: null | MessagesTypes | undefined) => void;
-  isChannel: boolean;
 }
 const Conversation = ({
-  chatUserDetails,
-  chatUserConversations,
-  onDelete,
+  user,
+  topic,
+  socket,
   onSetReplyData,
-  isChannel,
 }: ConversationProps) => {
+
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
-  const { userProfile } = useProfile();
+  
 
   const { getUserConversationsLoading, isMessageForwarded } = useAppSelector(
     (state: any) => ({
@@ -44,10 +44,10 @@ const Conversation = ({
     })
   );
 
-  const messages =
-    chatUserConversations.messages && chatUserConversations.messages.length
-      ? chatUserConversations.messages
-      : [];
+  // const messages =
+  //   chatUserConversations.messages && chatUserConversations.messages.length
+  //     ? chatUserConversations.messages
+  //     : [];
 
   const ref = useRef<any>();
   const scrollElement = useCallback(() => {
@@ -65,16 +65,93 @@ const Conversation = ({
     }
   }, [ref]);
 
+  let scrollState = true;
+  const scrollElement1 = useCallback(() => {
+    scrollState = false;
+    if (ref && ref.current) {
+      const listEle = document.getElementById("chat-conversation-list");
+      let offsetHeight = 0;
+      if (listEle) {
+        offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
+      }
+      if (offsetHeight) {
+        ref.current
+          .getScrollElement()
+          .scrollTo({ top: offsetHeight, behavior: "auto" }); // Use "auto" instead of "smooth" for immediate scroll
+      }
+    }
+  }, [ref]);
+
+
+  const scrollToBottom = () => {
+    scrollState = false;
+    const listEle = document.getElementById("chat-conversation-list");
+      let offsetHeight = 0;
+      if (listEle) {
+        offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
+      }
+      if (offsetHeight) {
+        ref.current
+          .getScrollElement()
+          .scrollTo({ top: offsetHeight, behavior: "auto" }); // Use "auto" instead of "smooth" for immediate scroll
+      }
+    // if (ref && ref.current) {
+    //   const listEle = document.getElementById("chat-conversation-list");
+    //   let offsetHeight = 0;
+    //   if (listEle) {
+    //     offsetHeight = listEle.scrollHeight - window.innerHeight + 250;
+    //   }
+    //   if (offsetHeight) {
+    //     ref.current
+    //       .getScrollElement()
+    //       .scrollTo({ top: offsetHeight, behavior: "auto" }); // Use "auto" instead of "smooth" for immediate scroll
+    //   }
+    // }
+  };
+  
+
+  //user info (userid)
+  const userProfile = user;
+  const [messages, setMessages] = useState<any[]>([]);
+    
+
+  const handleTopic = () => {
+  
+    socket.on('connect', () => {
+      console.log('Connected to WebSocket server');      
+      socket.emit('handleJoinTopic', { topicId: topic.id });
+    });
+
+
+    socket.on('chat', (savedMessage: any) => {
+      setMessages(prevMessages => [...prevMessages, savedMessage]);
+    });
+
+    socket.on('chatHistory', (chatHistory: any) => {
+      setMessages(chatHistory);
+    });
+  }
+
   useEffect(() => {
     if (ref && ref.current) {
       ref.current.recalculate();
     }
   }, []);
   useEffect(() => {
-    if (chatUserConversations.messages) {
+    if (messages) {
       scrollElement();
     }
-  }, [chatUserConversations.messages, scrollElement]);
+  }, [messages, scrollElement]);
+
+
+  useEffect(() => {
+    handleTopic();
+  }, []);
+  // useEffect(() => {
+  //   if (messages) {
+  //     scrollToBottom();
+  //   }
+  // }, [messages, scrollToBottom]);
 
   /*
   forward message
@@ -108,12 +185,25 @@ const Conversation = ({
   /*
   image delete
   */
+//  console.log(messages);
+ 
   const onDeleteImage = (
     messageId: string | number,
     imageId: string | number
   ) => {
-    dispatch(deleteImage(chatUserDetails.id, messageId, imageId));
+    // dispatch(deleteImage(chatUserDetails.id, messageId, imageId));
   };
+
+  if(scrollState){
+    // console.log("end");
+    
+    // scrollElement1();
+    // scrollToBottom();
+  }
+  // console.log(scrollState);
+  
+  // scrollToBottom();
+  
   return (
     <AppSimpleBar
       scrollRef={ref}
@@ -124,25 +214,22 @@ const Conversation = ({
         className="list-unstyled chat-conversation-list"
         id="chat-conversation-list"
       >
-        {(messages || []).map((message: MessagesTypes, key: number) => {
-          const isFromMe = message.meta.sender + "" === userProfile.uid + "";
+        {(messages || []).map((message: any, key: number) => {
+          const isFromMe = message.user.id + "" === userProfile + "";
           return (
             <Message
               message={message}
               key={key}
-              chatUserDetails={chatUserDetails}
-              onDelete={onDelete}
               onSetReplyData={onSetReplyData}
               isFromMe={isFromMe}
               onOpenForward={onOpenForward}
-              isChannel={isChannel}
               onDeleteImage={onDeleteImage}
             />
           );
         })}
         {/*  <Day /> */}
       </ul>
-      {isOpenForward && (
+      {/* {isOpenForward && (
         <ForwardModal
           isOpen={isOpenForward}
           onClose={onCloseForward}
@@ -150,7 +237,7 @@ const Conversation = ({
           chatUserDetails={chatUserDetails}
           onForward={onForwardMessage}
         />
-      )}
+      )} */}
     </AppSimpleBar>
   );
 };
