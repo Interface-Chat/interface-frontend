@@ -11,8 +11,7 @@ import { TABS } from "../../constants/index";
 import Profile from "./Profile/index";
 import Chats from "./Chats/index";
 import Contacts from "./Contacts/index";
-import Calls from "./Calls/index";
-import Bookmark from "./Bookmark/index";
+
 import Settings from "./Settings/index";
 
 interface LeftbarProps {}
@@ -44,7 +43,7 @@ const Leftbar = (props: LeftbarProps) => {
             <Chats />
           </TabPane>
 
-          <TabPane
+          {/* <TabPane
             tabId={TABS.CONTACTS}
             role="tabpanel"
           >
@@ -63,7 +62,7 @@ const Leftbar = (props: LeftbarProps) => {
             role="tabpanel"
           >
             <Bookmark />
-          </TabPane>
+          </TabPane> */}
 
           <TabPane
             tabId={TABS.SETTINGS}

@@ -12,35 +12,23 @@ import {
   getFirebaseBackend,
   setLoggeedInUser,
 } from "../../../helpers/firebase_helper";
-import {
-  postFakeLogin,
-  postJwtLogin,
-  postSocialLogin,
-} from "../../../api/index";
+
+import axios from "axios";
+const apiUrl = 'http://localhost:3001/auth/login';
 
 const fireBaseBackend = getFirebaseBackend();
 
 function* loginUser({ payload: { user } }: any) {
   try {
-    if (process.env.REACT_APP_DEFAULTAUTH === "jwt") {
-      const response: Promise<any> = yield call(postJwtLogin, {
-        email: user.email,
-        password: user.password,
-      });
-      setLoggeedInUser(response);
-      yield put(
-        authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
-      );
-    } else if (process.env.REACT_APP_DEFAULTAUTH === "fake") {
-      const response: Promise<any> = yield call(postFakeLogin, {
-        email: user.email,
-        password: user.password,
-      });
-      // setLoggeedInUser(response);
-      yield put(
-        authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
-      );
-    }
+    const response: Promise<any> = yield call(axios.post, apiUrl, {
+      username: user.email,
+      password: user.password,
+    });
+
+    setLoggeedInUser(response);
+    yield put(
+      authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
+    );
   } catch (error: any) {
     yield put(
       authLoginApiResponseError(AuthLoginActionTypes.LOGIN_USER, error)
@@ -48,31 +36,6 @@ function* loginUser({ payload: { user } }: any) {
   }
 }
 
-function* socialLogin({ payload: { data, type } }: any) {
-  try {
-    if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-      let fireBaseBackend = getFirebaseBackend();
-      const response: Promise<any> = yield call(
-        fireBaseBackend.socialLoginUser,
-        data,
-        type
-      );
-      setLoggeedInUser(response);
-      yield put(
-        authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
-      );
-    } else {
-      const response: Promise<any> = yield call(postSocialLogin, data);
-      yield put(
-        authLoginApiResponseSuccess(AuthLoginActionTypes.LOGIN_USER, response)
-      );
-    }
-  } catch (error: any) {
-    yield put(
-      authLoginApiResponseError(AuthLoginActionTypes.LOGIN_USER, error)
-    );
-  }
-}
 
 function* logoutUser() {
   try {
@@ -97,7 +60,6 @@ function* logoutUser() {
 function* loginSaga() {
   yield takeEvery(AuthLoginActionTypes.LOGIN_USER, loginUser);
   yield takeEvery(AuthLoginActionTypes.LOGOUT_USER, logoutUser);
-  // yield takeLatest(AuthLoginActionTypes.SOCIAL_LOGIN, socialLogin);
 }
 
 export default loginSaga;

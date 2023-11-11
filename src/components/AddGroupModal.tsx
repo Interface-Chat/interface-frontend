@@ -181,7 +181,8 @@ const AddGroupModal = ({
       members: selectedContacts,
       description: data.description,
     };
-    onCreateChannel(params);
+    
+    // onCreateChannel(params);
   };
 
   return (
@@ -195,14 +196,14 @@ const AddGroupModal = ({
       role="dialog"
     >
       <ModalHeader className="modal-title-custom" toggle={onClose}>
-        Create New Group
+        Create New Topic
       </ModalHeader>
 
       <ModalBody className="p-4">
         <Form>
           <div className="mb-4">
             <Label htmlFor="addgroupname-input" className="form-label">
-              Group Name
+              Topic Title
             </Label>
             <Input
               type="text"
@@ -216,7 +217,18 @@ const AddGroupModal = ({
             />
           </div>
           <div className="mb-4">
-            <label className="form-label">Group Members</label>
+            <label className="form-label">Topic Tags</label>
+            <div className="mb-3">
+              <Button
+                color="light"
+                size="sm"
+                type="button"
+                onClick={toggleCollapse}
+              >
+                Select Tags
+              </Button>
+            </div>
+            <label className="form-label">Topic Members</label>
             <div className="mb-3">
               <Button
                 color="light"
@@ -279,7 +291,7 @@ const AddGroupModal = ({
           onClick={onSubmit}
           disabled={!valid}
         >
-          Create Groups
+          Create Topic
         </Button>
       </ModalFooter>
     </Modal>

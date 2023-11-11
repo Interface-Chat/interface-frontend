@@ -32,27 +32,6 @@ const MENU_ITEMS: MenuItemType[] = [
     tabId: TABS.CHAT,
   },
   {
-    id: 3,
-    key: "pills-contacts-tab",
-    icon: "bx bxs-user-detail",
-    tooltipTitle: "Contacts",
-    tabId: TABS.CONTACTS,
-  },
-  {
-    id: 4,
-    key: "pills-calls-tab",
-    icon: "bx bx-phone-call",
-    tooltipTitle: "Calls",
-    tabId: TABS.CALLS,
-  },
-  {
-    id: 5,
-    key: "pills-bookmark-tab",
-    icon: "bx bx-bookmarks",
-    tooltipTitle: "Bookmark",
-    tabId: TABS.BOOKMARK,
-  },
-  {
     id: 6,
     key: "pills-setting-tab",
     icon: "bx bx-cog",

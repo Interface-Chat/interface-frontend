@@ -71,8 +71,8 @@ const Login = (props: LoginProps) => {
   );
 
   const defaultValues: any = {
-    email: "admin@themesbrand.com",
-    password: "123456",
+    email: "q",
+    password: "1",
   };
 
   const methods = useForm({ defaultValues, resolver });
@@ -127,7 +127,7 @@ const Login = (props: LoginProps) => {
                 />
               </div>
 
-              {/* <div className="mb-3">
+              <div className="mb-3">
                 <FormInput
                   label="Password"
                   type="password"
@@ -139,7 +139,7 @@ const Login = (props: LoginProps) => {
                   className="form-control pe-5"
                   placeholder="Enter Password"
                 />
-              </div> */}
+              </div>
 
               <div className="form-check form-check-info font-size-16">
                 <input
