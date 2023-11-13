@@ -51,7 +51,7 @@ const profileDetails: ProfileDetailsTypes = {
     description:
       "If several languages coalesce, the grammar of the resulting language is more simple.",
     fullName: "Kathryn Swarey",
-    email: "admin@themesbrand.com",
+    email: "admin@seksa.today.com",
     location: "California, USA",
     avatar: avatar1,
     coverImage: image4,

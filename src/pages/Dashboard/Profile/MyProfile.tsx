@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Dropdown,
@@ -6,14 +6,22 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-
+import userIcon from "../../../assets/icons/User_icon_2.svg.webp"
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
+interface User {
+  roles: any;
+  displayName: string;
+  // Add other properties as needed
+}
 interface MyProfileProps {
+  user: User;
   basicDetails: BasicDetailsTypes;
 }
-const MyProfile = ({ basicDetails }: MyProfileProps) => {
+const MyProfile = ({ user, basicDetails }: MyProfileProps) => {
+
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -25,11 +33,11 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
     <>
       <div className="user-profile-img">
         {basicDetails && basicDetails.coverImage && (
-          <img
-            src={basicDetails.coverImage}
+          <div
+            // src=""
+            // alt=""
             className="profile-img"
             style={{ height: "160px" }}
-            alt=""
           />
         )}
 
@@ -54,20 +62,6 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
                         className="d-flex align-items-center justify-content-between"
                         href="#"
                       >
-                        Info{" "}
-                        <i className="bx bx-info-circle ms-2 text-muted"></i>
-                      </DropdownItem>
-                      <DropdownItem
-                        className="d-flex align-items-center justify-content-between"
-                        href="#"
-                      >
-                        Setting <i className="bx bx-cog text-muted ms-2"></i>
-                      </DropdownItem>
-                      <DropdownItem divider />
-                      <DropdownItem
-                        className="d-flex align-items-center justify-content-between"
-                        href="#"
-                      >
                         Help{" "}
                         <i className="bx bx-help-circle ms-2 text-muted"></i>
                       </DropdownItem>
@@ -84,16 +78,17 @@ const MyProfile = ({ basicDetails }: MyProfileProps) => {
         <div className="mb-lg-3 mb-2">
           {basicDetails && basicDetails.coverImage && (
             <img
-              src={basicDetails.avatar}
+              src={userIcon}
+              alt="profile"
               className="rounded-circle avatar-lg img-thumbnail"
-              alt=""
+              
             />
           )}
         </div>
 
-        <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
+        <h5 className="font-size-16 mb-1 text-truncate">{user?.displayName}</h5>
         <p className="text-muted font-size-14 text-truncate mb-0">
-          {basicDetails && basicDetails.title ? basicDetails.title : "-"}
+          {user?.roles?.name}
         </p>
       </div>
     </>

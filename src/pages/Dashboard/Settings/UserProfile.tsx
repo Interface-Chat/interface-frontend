@@ -7,6 +7,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 import classnames from "classnames";
+import userIcon from "../../../assets/icons/User_icon_2.svg.webp"
 
 // interface
 import { BasicDetailsTypes } from "../../../data/settings";
@@ -14,10 +15,11 @@ import { BasicDetailsTypes } from "../../../data/settings";
 // CONSTANTS
 import { STATUS_TYPES } from "../../../constants";
 interface UserProfileProps {
+  user: any;
   basicDetails: BasicDetailsTypes;
   status: STATUS_TYPES;
 }
-const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
+const UserProfile = ({ user, basicDetails, status }: UserProfileProps) => {
   const fullName = basicDetails
     ? `${basicDetails.firstName} ${basicDetails.lastName}`
     : "-";
@@ -64,7 +66,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
     <div className="text-center p-3 p-lg-4 border-bottom pt-2 pt-lg-2 mt-n5 position-relative">
       <div className="mb-3 profile-user">
         <img
-          src={image}
+          src={userIcon}
           className="rounded-circle avatar-lg img-thumbnail user-profile-image"
           alt="user-profile"
         />
@@ -87,7 +89,7 @@ const UserProfile = ({ basicDetails, status }: UserProfileProps) => {
         </div>
       </div>
 
-      <h5 className="font-size-16 mb-1 text-truncate">{fullName}</h5>
+      <h5 className="font-size-16 mb-1 text-truncate">{user?.displayName}</h5>
 
       <Dropdown
         className="d-inline-block"

@@ -25,11 +25,12 @@ const UserCoverImage = ({ basicDetails }: UserCoverImageProps) => {
   };
   return (
     <div className="user-profile-img">
-      <img
-        src={image}
+      <div
+        // src={image}
+        // alt=""
         className="profile-img profile-foreground-img"
         style={{ height: "160px" }}
-        alt=""
+        
       />
       <div className="overlay-content">
         <div>

@@ -25,6 +25,15 @@ import Privacy from "./Privacy";
 import Security from "./Security";
 import Help from "./Help";
 
+import axios from "axios";
+const apiUrl = 'http://localhost:3001/auth/profile';
+
+
+interface User {
+  displayName: string;
+  // Add other properties as needed
+}
+
 interface CollapseItemTypes {
   value:
     | SETTINGS_COLLAPSES.PROFILE
@@ -100,6 +109,35 @@ const AccordianItem = ({
 };
 interface IndexProps {}
 const Index = (props: IndexProps) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('authUser');
+      const tokenObj = token ? JSON.parse(token) : null;
+
+      if (!tokenObj) {
+        console.error('No token found in localStorage');
+        // Handle the absence of a token, such as redirecting to the login page
+      } else {
+        const headers = {
+          'Authorization': `Bearer ${tokenObj.access_token}`,
+          'Content-Type': 'application/json',
+        };
+
+        try {
+          const response = await axios.get(apiUrl, { headers });
+          setUser(response.data as User);
+          console.log('User profile:', response);
+        } catch (error) {
+          console.error('Error retrieving user profile:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to ensure the effect runs only once
+
   // global store
   const { dispatch, useAppSelector } = useRedux();
 
@@ -143,7 +181,7 @@ const Index = (props: IndexProps) => {
       value: SETTINGS_COLLAPSES.PROFILE,
       label: "Personal Info",
       icon: "bx bxs-user",
-      component: <PersonalInfo basicDetails={settings.basicDetails} />,
+      component: <PersonalInfo user={user} basicDetails={settings.basicDetails} />,
     },
     {
       value: SETTINGS_COLLAPSES.THEME,
@@ -198,6 +236,7 @@ const Index = (props: IndexProps) => {
       <UserCoverImage basicDetails={settings.basicDetails} />
 
       <UserProfile
+        user = {user}
         basicDetails={settings.basicDetails}
         status={settings.status}
       />

@@ -28,6 +28,8 @@ import avatar1 from "../../assets/images/users/avatar-1.jpg";
 // menu
 import { MENU_ITEMS, MenuItemType } from "./menu";
 
+import userIcon from "../../assets/icons/User_icon_2.svg.webp"
+
 const LogoLightSVG = () => {
   return (
     <svg
@@ -138,7 +140,7 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
       toggle={toggle}
     >
       <DropdownToggle nav className="bg-transparent">
-        <img src={avatar1} alt="" className="profile-user rounded-circle" />
+        <img src={userIcon} alt="" className="profile-user rounded-circle" />
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem

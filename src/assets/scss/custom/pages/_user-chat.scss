@@ -4,6 +4,12 @@
 
 // user chat
 
+.topicSelection:hover {
+  border-radius: 5px;
+  background-color: rgba(0, 128, 0, 0.42); /* Replace with the color you want */
+}
+
+
 .user-chat {
   background: url("../../../images/bg-pattern/pattern-05.png");
   transition: all 0.4s;

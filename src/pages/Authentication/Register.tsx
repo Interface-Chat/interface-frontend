@@ -74,7 +74,7 @@ const Register = (props: RegisterProps) => {
           <div className="py-md-5 py-4">
             <AuthHeader
               title="Register Account"
-              subtitle="Get your free Doot account now."
+              subtitle="Get your free Interface Chat account now."
             />
 
             {user && user ? (
@@ -134,7 +134,7 @@ const Register = (props: RegisterProps) => {
 
               <div className="mb-4">
                 <p className="mb-0">
-                  By registering you agree to the Doot{" "}
+                  By registering you agree to the Interface Chat{" "}
                   <Link to="#" className="text-primary">
                     Terms of Use
                   </Link>

@@ -24,7 +24,7 @@ const ChatChannel = ({ channel, selectedChat, onSelectChat }: ChannelProps) => {
   return (
     <li className={classnames({ active: isSelectedChat })} onClick={onClick}>
       <Link to="#">
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center topicSelection">
           <div className="flex-shrink-0 avatar-xs me-2">
             <span className="avatar-title rounded-circle bg-soft-light text-dark">
               #

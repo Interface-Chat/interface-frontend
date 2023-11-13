@@ -3,30 +3,27 @@ import React from "react";
 // interface
 import { BasicDetailsTypes } from "../../../data/myProfile";
 
+
+
+
 interface UserDescriptionProps {
+  user: any;
   basicDetails: BasicDetailsTypes;
 }
-const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
+const UserDescription = ({ user, basicDetails }: UserDescriptionProps) => {
   return (
     <>
-      <div className="text-muted">
-        <p className="mb-4">
-          {basicDetails && basicDetails.description
-            ? basicDetails.description
-            : "-"}
-        </p>
-      </div>
+
 
       <div>
         <div className="d-flex py-2">
           <div className="flex-shrink-0 me-3">
             <i className="bx bx-user align-middle text-muted"></i>
           </div>
-          <div className="flex-grow-1">
+          <div>User:</div>
+          <div className="flex-grow-1 mx-3">
             <p className="mb-0">
-              {basicDetails && basicDetails.fullName
-                ? basicDetails.fullName
-                : "-"}
+              {user?.displayName}
             </p>
           </div>
         </div>
@@ -35,9 +32,10 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
           <div className="flex-shrink-0 me-3">
             <i className="bx bx-message-rounded-dots align-middle text-muted"></i>
           </div>
-          <div className="flex-grow-1">
+          <div>Email:</div>
+          <div className="flex-grow-1 mx-3">
             <p className="mb-0">
-              {basicDetails && basicDetails.email ? basicDetails.email : "-"}
+              {user?.email ? user.email : "-"}
             </p>
           </div>
         </div>
@@ -46,12 +44,12 @@ const UserDescription = ({ basicDetails }: UserDescriptionProps) => {
           <div className="flex-shrink-0 me-3">
             <i className="bx bx-location-plus align-middle text-muted"></i>
           </div>
-          <div className="flex-grow-1">
-            <p className="mb-0">
-              {basicDetails && basicDetails.location
-                ? basicDetails.location
-                : "-"}
-            </p>
+          <div>Tag:</div>
+          <div className="flex-grow-1 mx-3">
+          {user?.tags.map((tag: { id: React.Key | null | undefined; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
+        <a className="font-size-14 mb-0" key={tag.id}>@{tag.name} </a>
+      ))}
+           
           </div>
         </div>
       </div>
