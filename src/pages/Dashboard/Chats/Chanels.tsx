@@ -6,9 +6,10 @@ import { UncontrolledTooltip } from "reactstrap";
 // components
 import AddButton from "../../../components/AddButton";
 import ChatChannel from "./ChatChannel";
+import { io } from "socket.io-client";
 
 interface ChanelsProps {
-  topics: any;
+  // topics: any;
   channels: Array<any>;
   openCreateChannel: () => void;
   selectedChat: string | number;
@@ -17,12 +18,64 @@ interface ChanelsProps {
 
 
 const Chanels = ({
-  topics,
+  // topics,
   channels,
   openCreateChannel,
   selectedChat,
   onSelectChat,
 }: ChanelsProps) => {
+
+       
+  // socket.on('userTopics', (topics: any) => {
+  //   console.log('Received user topics:', topics);
+  //   setTopic(topics);
+  // });
+
+  const accessToken = localStorage.getItem('authUser');
+  const tokenObj = accessToken ? JSON.parse(accessToken) : null;
+
+    // console.log(tokenObj.access_token);
+    
+    
+  const [userTopics, setUserTopics] = useState([]);
+  const newSocket = io('http://localhost:3001');
+  useEffect(() => {
+    
+
+    newSocket.on('connect', () => {
+      console.log('Connected to the server');
+      newSocket.emit('handleUserConnection', { token: tokenObj.access_token });
+    });
+
+    newSocket.on('userTopics', (topics) => {
+      
+      console.log('Received user topics:', topics);
+      setUserTopics(topics);
+    });
+
+    newSocket.on('error', (errorMessage) => {
+      console.error('WebSocket error:', errorMessage);
+    });
+
+
+  }, []);
+  useEffect(() => {
+    // const newSocket = io('http://localhost:3001', {
+    //   query: {
+    //     token: tokenObj.access_token,
+    //   },
+    // });
+
+
+    newSocket.on('userTopics', (topics) => {
+      
+      console.log('Received user topics:', topics);
+      setUserTopics(topics);
+    });
+
+  }, [userTopics]);
+
+
   
   
 
@@ -48,7 +101,7 @@ const Chanels = ({
       </div>
       <div className="chat-message-list">
         <ul className="list-unstyled chat-list chat-user-list mb-3">
-          {(topics || []).map((topic: any, key: number) => (
+          {(userTopics || []).map((topic: any, key: number) => (
             <ChatChannel
               channel={topic}
               key={key}

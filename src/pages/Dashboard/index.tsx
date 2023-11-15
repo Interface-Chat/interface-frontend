@@ -18,10 +18,49 @@ import UserProfileDetails from "./UserProfileDetails/index";
 import Welcome from "./ConversationUser/Welcome";
 import { getTopicDetails } from "../../api";
 
+import axios from "axios";
+const apiUrl = 'http://localhost:3001/auth/profile';
+
 interface IndexProps {}
 const Index = (props: IndexProps) => {
-  const socket = io('http://localhost:3001');
+  // const socket = io('http://localhost:3001');
   
+  const token = localStorage.getItem('authUser');
+  const socket = io('http://localhost:3001', {
+      query: {
+        token: token,
+      },
+    });
+
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      
+      const tokenObj = token ? JSON.parse(token) : null;
+
+      if (!tokenObj) {
+        console.error('No token found in localStorage');
+        // Handle the absence of a token, such as redirecting to the login page
+      } else {
+        const headers = {
+          'Authorization': `Bearer ${tokenObj.access_token}`,
+          'Content-Type': 'application/json',
+        };
+
+        try {
+          const response = await axios.get(apiUrl, { headers });
+          setUser(response.data);
+          console.log('User profile:', response);
+        } catch (error) {
+          console.error('Error retrieving user profile:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to ensure the effect runs only once
+
 
   // useEffect(() => {
   //   const socketTest = io('http://localhost:3001');
@@ -42,20 +81,11 @@ const Index = (props: IndexProps) => {
 
 
   
-const [user, setUser] = useState('');
-const handleUserChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-  setUser(e.target.value);
-};
+
 
   return socket ? (
     <SocketProvider socket={socket}>
       <>
-    <input
-        type="text"
-        placeholder="Input UserID"
-        value={user}
-        onChange={handleUserChange} // Call handleTitleChange on input change
-      />
       <Leftbar />
       
       <div

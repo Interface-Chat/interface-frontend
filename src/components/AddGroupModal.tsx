@@ -23,25 +23,35 @@ import { CreateChannelPostData } from "../redux/actions";
 
 // components
 import AppSimpleBar from "./AppSimpleBar";
+import axios from "axios";
 
 interface DataTypes {
-  id: any;
   channelName: string;
   description: string;
+  tags: [];
+  users: [];
 }
 interface ContactItemProps {
-  contact: ContactTypes;
+  data: any;
+
   selected: boolean;
   onSelectContact: (id: string | number, selected: boolean) => void;
 }
+interface ContactItemProps1 {
+  data: any;
+
+  selected: boolean;
+  onSelectContact1: (id: string | number, selected: boolean) => void;
+}
 const ContactItem = ({
-  contact,
+  data,
+
   selected,
   onSelectContact,
 }: ContactItemProps) => {
-  const fullName = `${contact.firstName} ${contact.lastName}`;
+  // const fullName = `${contact.firstName} ${contact.lastName}`;
   const onCheck = (checked: boolean) => {
-    onSelectContact(contact.id, checked);
+    onSelectContact(data.id, checked);
   };
 
   return (
@@ -50,14 +60,44 @@ const ContactItem = ({
         <Input
           type="checkbox"
           className="form-check-input"
-          id={`contact-${contact.id}`}
+          id={`contact-${data.id}`}
           onChange={(e: any) => {
             onCheck(e.target.checked)
           }}
-          value={fullName}
+          value={data.name}
         />
-        <Label className="form-check-label" htmlFor={`contact-${contact.id}`}>
-          {fullName}
+        <Label className="form-check-label" htmlFor={`contact-${data.id}`}>
+          {data.name}
+        </Label>
+      </div>
+    </li>
+  );
+};
+const ContactItem1 = ({
+  data,
+
+  selected,
+  onSelectContact1,
+}: ContactItemProps1) => {
+  // const fullName = `${contact.firstName} ${contact.lastName}`;
+  const onCheck = (checked: boolean) => {
+    onSelectContact1(data.id, checked);
+  };
+
+  return (
+    <li>
+      <div className="form-check">
+        <Input
+          type="checkbox"
+          className="form-check-input"
+          id={`contact-${data.id}`}
+          onChange={(e: any) => {
+            onCheck(e.target.checked)
+          }}
+          value={data.username}
+        />
+        <Label className="form-check-label" htmlFor={`contact-${data.id}`}>
+          {data.username}
         </Label>
       </div>
     </li>
@@ -65,35 +105,59 @@ const ContactItem = ({
 };
 
 interface CharacterItemProps {
-  letterContacts: DivideByKeyResultTypes;
+
   index: number;
   totalContacts: number;
   selectedContacts: Array<number | string>;
   onSelectContact: (id: string | number, selected: boolean) => void;
+  tags: any;
 }
 
 const CharacterItem = ({
-  letterContacts,
   index,
   totalContacts,
   selectedContacts,
   onSelectContact,
+  tags,
 }: CharacterItemProps) => {
-  return (
-    <div>
-      <div className="contact-list-title">{letterContacts.letter}</div>
 
-      <ul
-        className={classnames("list-unstyled", "contact-list", {
-          "mb-0": index + 1 === totalContacts,
-        })}
-      >
-        {(letterContacts.data || []).map((contact: any, key: number) => {
-          const selected: boolean = selectedContacts.includes(contact.id);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredTags = tags.filter((tag: { name: string; }) =>
+    tag.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return (
+
+    <div>
+      {/* <input
+        type="text"
+        placeholder="Search tags"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      /> */}
+      <div className="input-group mb-3 sticky-top ">
+        <Input
+          type="text"
+
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+
+          className="form-control bg-light border-0 pe-0"
+          placeholder="Search Tag here..."
+        />
+        <Button color="light" type="button" id="searchbtn-addon">
+          <i className="bx bx-search align-middle"></i>
+        </Button>
+      </div>
+
+      <ul className="list-unstyled contact-list">
+        {filteredTags.map((tag: any) => {
+          const selected: boolean = selectedContacts.includes(tag.id);
           return (
             <ContactItem
-              contact={contact}
-              key={key}
+              data={tag}
+              key={tag.id}
               selected={selected}
               onSelectContact={onSelectContact}
             />
@@ -103,6 +167,71 @@ const CharacterItem = ({
     </div>
   );
 };
+interface CharacterItemProps1 {
+
+  index: number;
+  totalContacts: number;
+  selectedContacts: Array<number | string>;
+  onSelectContact1: (id: string | number, selected: boolean) => void;
+  tags: any;
+}
+
+const CharacterItem1 = ({
+  index,
+  totalContacts,
+  selectedContacts,
+  onSelectContact1,
+  tags,
+}: CharacterItemProps1) => {
+
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredTags = tags.filter((tag: { username: string; }) =>
+    tag.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return (
+
+    <div>
+      {/* <input
+        type="text"
+        placeholder="Search tags"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      /> */}
+      <div className="input-group mb-3 sticky-top">
+        <Input
+          type="text"
+
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+
+          className="form-control bg-light border-0 pe-0"
+          placeholder="Search User here..."
+        />
+        <Button color="light" type="button" id="searchbtn-addon">
+          <i className="bx bx-search align-middle"></i>
+        </Button>
+      </div>
+
+      <ul className="list-unstyled contact-list">
+        {filteredTags.map((tag: any) => {
+          const selected: boolean = selectedContacts.includes(tag.id);
+          return (
+            <ContactItem1
+              data={tag}
+              key={tag.id}
+              selected={selected}
+              onSelectContact1={onSelectContact1}
+            />
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+
 interface AddGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -120,11 +249,21 @@ const AddGroupModal = ({
   const toggleCollapse = () => {
     setIsOpenCollapse(!isOpenCollapse);
   };
+  const [isOpenCollapse1, setIsOpenCollapse1] = useState(false);
+  const toggleCollapse1 = () => {
+    setIsOpenCollapse1(!isOpenCollapse1);
+  };
 
   /*
     contacts hook
     */
   const { categorizedContacts, totalContacts } = useContacts();
+
+
+
+
+
+
   /*
   select contacts
   */
@@ -140,16 +279,32 @@ const AddGroupModal = ({
     }
     setSelectedContacts(modifiedList);
   };
+  /*
+  select users
+  */
+  const [selectedContacts1, setSelectedContacts1] = useState<
+    Array<string | number>
+  >([]);
+  const onSelectContact1 = (id: string | number, selected: boolean) => {
+    let modifiedList: Array<string | number> = [...selectedContacts1];
+    if (selected) {
+      modifiedList = [...modifiedList, id];
+    } else {
+      modifiedList = modifiedList.filter(m => m + "" !== id + "");
+    }
+    setSelectedContacts1(modifiedList);
+  };
 
   /*
     data
     */
   const [data, setData] = useState<DataTypes>({
-    id : "",
     channelName: "",
     description: "",
+    tags: [],
+    users: [],
   });
-  const onDataChange = (field: "id" | "channelName" | "description", value: any) => {
+  const onDataChange = (field: "tags" | "users" | "channelName" | "description", value: any) => {
     let modifiedData: DataTypes = { ...data };
     modifiedData[field] = value;
     setData(modifiedData);
@@ -162,28 +317,93 @@ const AddGroupModal = ({
   useEffect(() => {
     if (
       selectedContacts.length === 0 &&
+      selectedContacts1.length === 0 &&
       !data.description &&
       data.description === ""
     ) {
       setValid(false);
-    } else {
+    } else if (data.channelName === ""){
+      setValid(false);
+    }
+     else {
       setValid(true);
     }
-  }, [selectedContacts, data]);
+  }, [selectedContacts, selectedContacts1, data]);
 
   /*
     submit data
     */
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const params = {
-      id : data.id,
-      name: data.channelName,
-      members: selectedContacts,
+      title: data.channelName,
+      tags: selectedContacts,
+      users: selectedContacts1,
       description: data.description,
     };
+
+    console.log(params);
+
     
+
+    try {
+      const token = localStorage.getItem('authUser');
+      const tokenObj = token ? JSON.parse(token) : null;
+      // Assuming your backend API is running at http://localhost:3000
+      const response = await axios.post('http://localhost:3001/topics/user-create', params, {
+  headers: {
+    'Authorization': `Bearer ${tokenObj.access_token}`,
+    // Other headers if needed
+  },
+});
+      
+    } catch (error) {
+      console.error('Error creating topic:', error);
+      // Handle error as needed, e.g., show an error message to the user
+    }
+    
+
     // onCreateChannel(params);
   };
+
+  const [tags, setTags] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/tags');
+        console.log(response.data);
+
+        setTags(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/users/list');
+        console.log(response.data);
+
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(users);
+  }, [users]);
+  useEffect(() => {
+    console.log(tags);
+  }, [tags]);
 
   return (
     <Modal
@@ -209,7 +429,7 @@ const AddGroupModal = ({
               type="text"
               className="form-control"
               id="addgroupname-input"
-              placeholder="Enter Group Name"
+              placeholder="Enter Topic Title"
               value={data.channelName || ""}
               onChange={(e: any) => {
                 onDataChange("channelName", e.target.value);
@@ -228,37 +448,64 @@ const AddGroupModal = ({
                 Select Tags
               </Button>
             </div>
+            <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
+              <div className="card border">
+                <div className="card-header">
+                  <h5 className="font-size-15 mb-0">Tags</h5>
+                </div>
+                <div className="card-body p-2">
+                  <AppSimpleBar style={{ maxHeight: "150px" }}>
+                    {
+                      <CharacterItem
+                        index={1}
+                        tags={tags}
+
+
+
+                        totalContacts={totalContacts}
+                        selectedContacts={selectedContacts}
+                        onSelectContact={onSelectContact}
+                      />
+
+                    }
+                  </AppSimpleBar>
+                </div>
+              </div>
+            </Collapse>
+
+
             <label className="form-label">Topic Members</label>
             <div className="mb-3">
               <Button
                 color="light"
                 size="sm"
                 type="button"
-                onClick={toggleCollapse}
+                onClick={toggleCollapse1}
               >
                 Select Members
               </Button>
             </div>
 
-            <Collapse isOpen={isOpenCollapse} id="groupmembercollapse">
+            <Collapse isOpen={isOpenCollapse1} id="groupmembercollapse">
               <div className="card border">
                 <div className="card-header">
                   <h5 className="font-size-15 mb-0">Contacts</h5>
                 </div>
                 <div className="card-body p-2">
                   <AppSimpleBar style={{ maxHeight: "150px" }}>
-                    {(categorizedContacts || []).map(
-                      (letterContacts: DivideByKeyResultTypes, key: number) => (
-                        <CharacterItem
-                          letterContacts={letterContacts}
-                          key={key}
-                          index={key}
-                          totalContacts={totalContacts}
-                          selectedContacts={selectedContacts}
-                          onSelectContact={onSelectContact}
-                        />
-                      )
-                    )}
+                    {
+                      <CharacterItem1
+                        index={2}
+                        tags={users}
+
+
+
+                        totalContacts={totalContacts}
+                        selectedContacts={selectedContacts}
+                        onSelectContact1={onSelectContact1}
+                      />
+
+                    }
                   </AppSimpleBar>
                 </div>
               </div>

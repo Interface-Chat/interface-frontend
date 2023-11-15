@@ -10,6 +10,27 @@ import { getLoggedinUser } from "../api/apiCore";
 import { divideByKey } from "../utils";
 
 import { getTopicDetails } from "../api";
+import axios from "axios";
+
+// const userTags = () => {
+
+//   const [data, setData] = useState([]);
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const response = await axios.get('http://localhost:3001/tags'); // Replace with your actual API endpoint
+//         setData(response.data);
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   return { data };
+// };
 
 const useProfile = () => {
   // global store

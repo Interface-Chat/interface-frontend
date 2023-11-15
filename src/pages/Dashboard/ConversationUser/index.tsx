@@ -69,7 +69,7 @@ const Index = ({
     if (socket && text.trim() !== '') {
       const messageData = {
         topic: topic.id, // Replace with the actual topic
-        id: user, // Replace with the actual username
+        id: user.id, // Replace with the actual username
         message: text,
       };
       console.log(messageData);

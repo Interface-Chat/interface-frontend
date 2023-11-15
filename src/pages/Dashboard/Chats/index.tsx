@@ -37,9 +37,11 @@ import Chanels from "./Chanels";
 import Archive from "./Archive";
 import { CHATS_TABS } from "../../../constants";
 import axios from "axios";
+import io from 'socket.io-client';
 
 interface IndexProps {}
 const Index = (props: IndexProps) => {
+ 
   // global store
   const { dispatch, useAppSelector } = useRedux();
   let user;
@@ -240,7 +242,7 @@ const Index = (props: IndexProps) => {
                 id="serachChatUser"
                 type="text"
                 className="form-control bg-light border-0 pe-0"
-                placeholder="Search here.."
+                placeholder="Search here..."
               />
               <Button color="light" type="button" id="searchbtn-addon">
                 <i className="bx bx-search align-middle"></i>
@@ -254,9 +256,9 @@ const Index = (props: IndexProps) => {
           {active === CHATS_TABS.DEFAULT && (
             <>
 
-              {/* channels list */}
+              {/* channels list dasd*/}
               <Chanels
-              topics={topics}
+              // topics={userTopics}
                 channels={channels}
                 openCreateChannel={openCreateChannelModal}
                 selectedChat={selectedChat}
