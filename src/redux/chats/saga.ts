@@ -118,9 +118,13 @@ function* getChatUserDetails({ payload: id }: any) {
   }
 }
 
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+//dsafgsadg
 function* getChatUserConversations({ payload: id }: any) {
   try {
-    const response: Promise<any> = yield call(getChatUserConversationsApi, id);
+    const response: Promise<any> = yield call(delay, 100)
     yield put(
       chatsApiResponseSuccess(
         ChatsActionTypes.GET_CHAT_USER_CONVERSATIONS,
@@ -298,9 +302,9 @@ function* toggleArchiveContact({ payload: id }: any) {
 
 function* readConversation({ payload: id }: any) {
   try {
-    const response: Promise<any> = yield call(readConversationApi, id);
+    // const response: Promise<any> = yield call(readConversationApi, id);
     yield put(
-      chatsApiResponseSuccess(ChatsActionTypes.READ_CONVERSATION, response)
+      chatsApiResponseSuccess(ChatsActionTypes.READ_CONVERSATION, "response")
     );
     yield put(getChannelsAction());
     yield put(getTopicsAction());

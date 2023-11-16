@@ -152,12 +152,12 @@ const Index = ({
         </Alert>
       ) : null}
 
-      <MoreMenu
+      {/* <MoreMenu
         isOpen={isOpen}
         onSelectImages={onSelectImages}
         onSelectFiles={onSelectFiles}
         onToggle={onToggle}
-      />
+      /> */}
   
       {/* <Reply
         reply={replyData}

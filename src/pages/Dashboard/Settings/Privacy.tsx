@@ -50,7 +50,7 @@ const Privacy = ({ privacy, onChangeSettings }: PrivacyProps) => {
   return (
     <div className="accordion-body">
       <ul className="list-group list-group-flush">
-        <li className="list-group-item py-3 px-0 pt-0">
+        {/* <li className="list-group-item py-3 px-0 pt-0">
           <DisplaySelect
             value={data.displayprofilePhoto}
             label="Profile photo"
@@ -125,7 +125,7 @@ const Privacy = ({ privacy, onChangeSettings }: PrivacyProps) => {
             }}
             label="Groups"
           />
-        </li>
+        </li> */}
       </ul>
     </div>
   );

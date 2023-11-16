@@ -14,7 +14,7 @@ const PersonalInfo = ({ user, basicDetails }: PersonalInfoProps) => {
     : "-";
   return (
     <div className="accordion-body">
-      <div className="float-end">
+      {/* <div className="float-end">
         <Button
           color="none"
           type="button"
@@ -22,7 +22,7 @@ const PersonalInfo = ({ user, basicDetails }: PersonalInfoProps) => {
         >
           <i className="bx bxs-pencil align-middle"></i>
         </Button>
-      </div>
+      </div> */}
 
       <div>
         <p className="text-muted mb-1">User</p>

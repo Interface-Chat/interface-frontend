@@ -322,10 +322,10 @@ const AddGroupModal = ({
       data.description === ""
     ) {
       setValid(false);
-    } else if (data.channelName === ""){
+    } else if (data.channelName === "") {
       setValid(false);
     }
-     else {
+    else {
       setValid(true);
     }
   }, [selectedContacts, selectedContacts1, data]);
@@ -343,26 +343,30 @@ const AddGroupModal = ({
 
     console.log(params);
 
-    
+
 
     try {
       const token = localStorage.getItem('authUser');
       const tokenObj = token ? JSON.parse(token) : null;
       // Assuming your backend API is running at http://localhost:3000
       const response = await axios.post('http://localhost:3001/topics/user-create', params, {
-  headers: {
-    'Authorization': `Bearer ${tokenObj.access_token}`,
-    // Other headers if needed
-  },
-});
-      
+        headers: {
+          'Authorization': `Bearer ${tokenObj.access_token}`,
+          // Other headers if needed
+        },
+      });
+
+      onClose()
+
     } catch (error) {
       console.error('Error creating topic:', error);
+      alert(error);
       // Handle error as needed, e.g., show an error message to the user
     }
-    
 
-    // onCreateChannel(params);
+
+
+
   };
 
   const [tags, setTags] = useState([]);

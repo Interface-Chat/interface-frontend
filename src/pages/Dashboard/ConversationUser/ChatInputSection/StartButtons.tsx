@@ -38,7 +38,7 @@ const StartButtons = ({ onToggle, onChange, text }: StartButtonsProps) => {
       <UncontrolledTooltip target="more-menu" placement="top">
         More
       </UncontrolledTooltip>
-      <div className="links-list-item" id="emoji">
+      {/* <div className="links-list-item" id="emoji">
         <Button
           type="button"
           className="btn btn-link text-decoration-none btn-lg waves-effect emoji-btn"
@@ -64,7 +64,7 @@ const StartButtons = ({ onToggle, onChange, text }: StartButtonsProps) => {
             <Picker onEmojiClick={onEmojiClick} />
           </div>
         </PopoverBody>
-      </Popover>
+      </Popover> */}
     </div>
   );
 };

@@ -14,9 +14,9 @@ interface ThemeSettingsProps {
 const ThemeSettings = ({ theme, onChangeData }: ThemeSettingsProps) => {
   return (
     <div className="accordion-body">
-      <ThemeColor theme={theme} onChangeData={onChangeData} />
+      {/* <ThemeColor theme={theme} onChangeData={onChangeData} />
 
-      <ThemeImage theme={theme} onChangeData={onChangeData} />
+      <ThemeImage theme={theme} onChangeData={onChangeData} /> */}
     </div>
   );
 };

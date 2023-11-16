@@ -106,7 +106,7 @@ const Login = (props: LoginProps) => {
               subtitle="Sign in to continue to Interface Chat."
             />
 
-            {error && <Alert color="danger">{error}</Alert>}
+            {error && <Alert color="danger">{"Incorrect Username or Password!"}</Alert>}
 
             <Form
               onSubmit={handleSubmit(onSubmitForm)}
@@ -141,7 +141,7 @@ const Login = (props: LoginProps) => {
                 />
               </div>
 
-              <div className="form-check form-check-info font-size-16">
+              {/* <div className="form-check form-check-info font-size-16">
                 <input
                   className="form-check-input"
                   type="checkbox"
@@ -153,7 +153,7 @@ const Login = (props: LoginProps) => {
                 >
                   Remember me
                 </Label>
-              </div>
+              </div> */}
 
               <div className="text-center mt-4">
                 <Button color="primary" className="w-100" type="submit">
@@ -163,7 +163,7 @@ const Login = (props: LoginProps) => {
 
             </Form>
 
-            <div className="mt-5 text-center text-muted">
+            {/* <div className="mt-5 text-center text-muted">
               <p>
                 Don't have an account ?{" "}
                 <Link
@@ -174,7 +174,7 @@ const Login = (props: LoginProps) => {
                   Register
                 </Link>
               </p>
-            </div>
+            </div> */}
           </div>
         </Col>
       </Row>

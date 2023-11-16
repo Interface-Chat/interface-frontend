@@ -155,12 +155,12 @@ const ProfileDropdownMenu = ({ onChangeTab }: ProfileDropdownMenuProps) => {
         >
           Setting <i className="bx bx-cog text-muted ms-1"></i>
         </DropdownItem>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex align-items-center justify-content-between"
           href="/auth-changepassword"
         >
           Change Password <i className="bx bx-lock-open text-muted ms-1"></i>
-        </DropdownItem>
+        </DropdownItem> */}
 
         <DropdownItem />
         <DropdownItem

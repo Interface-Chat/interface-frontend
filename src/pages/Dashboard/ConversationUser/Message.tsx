@@ -101,7 +101,7 @@ const ImageMoreMenu = ({ imagelink,onReply, onDelete }: ImageMoreMenuProps) => {
             <i className="bx bx-dots-horizontal-rounded"></i>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem
+            {/* <DropdownItem
               className="dropdown-item d-flex align-items-center justify-content-between"
               href={imagelink}
               download
@@ -131,7 +131,7 @@ const ImageMoreMenu = ({ imagelink,onReply, onDelete }: ImageMoreMenuProps) => {
               href="#"
             >
               Bookmark <i className="bx bx-bookmarks text-muted ms-2"></i>
-            </DropdownItem>
+            </DropdownItem> */}
             <DropdownItem
               tag="a"
               className=" d-flex align-items-center justify-content-between delete-item"
@@ -328,7 +328,9 @@ const Message = ({
   //   ? chatUserDetails.profileImage
   //   : imagePlaceholder;
   // const profile = isChannel ? channeluserProfile : chatUserprofile;
-  const date = formateDate(message.created_at, "dd - hh:mmaaa");
+  // const date = formateDate(message.created_at, "dd - hh:mmaaa");
+  const date = formateDate(message.created_at, "dd MMM yyyy 'at' hh:mm a");
+
   // const isSent = message.meta.sent;
   // const isReceived = message.meta.received;
   // const isRead = message.meta.read;
@@ -337,7 +339,11 @@ const Message = ({
   //   ? `${message.meta.userData.firstName} ${message.meta.userData.lastName}`
   //   : "-";
   // const fullName = isChannel ? channdelSenderFullname : chatUserFullName;
-  const senderName = message.user.username;
+  let senderName = message.user.username;
+  if(message.user.fullName){
+     senderName = `${message.user.fullName}(${message.user.username})`;
+  }
+  
   // console.log(senderName);
   
   // const onDeleteMessage = () => {
