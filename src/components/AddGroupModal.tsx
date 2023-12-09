@@ -493,7 +493,7 @@ const AddGroupModal = ({
             <Collapse isOpen={isOpenCollapse1} id="groupmembercollapse">
               <div className="card border">
                 <div className="card-header">
-                  <h5 className="font-size-15 mb-0">Contacts</h5>
+                  <h5 className="font-size-15 mb-0">Users</h5>
                 </div>
                 <div className="card-body p-2">
                   <AppSimpleBar style={{ maxHeight: "150px" }}>

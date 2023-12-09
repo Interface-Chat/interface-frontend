@@ -41,7 +41,7 @@ const Menu = ({ onReply, onForward }: MenuProps) => {
         <i className="ri-more-2-fill"></i>
       </DropdownToggle>
       <DropdownMenu>
-        <DropdownItem
+        {/* <DropdownItem
           className="d-flex align-items-center justify-content-between"
           to="#"
           onClick={onReply}
@@ -72,7 +72,7 @@ const Menu = ({ onReply, onForward }: MenuProps) => {
           to="#"
         >
           Mark as Unread <i className="bx bx-message-error text-muted ms-2"></i>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem
           className="d-flex align-items-center justify-content-between delete-item"
           // onClick={onDelete}

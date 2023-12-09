@@ -65,14 +65,14 @@ const Login = (props: LoginProps) => {
 
   const resolver = yupResolver(
     yup.object().shape({
-      email: yup.string().required("Please Enter E-mail."),
+      email: yup.string().required("Please Enter Username."),
       password: yup.string().required("Please Enter Password."),
     })
   );
 
   const defaultValues: any = {
-    email: "q",
-    password: "1",
+    // email: "q",
+    // password: "1",
   };
 
   const methods = useForm({ defaultValues, resolver });
@@ -122,7 +122,7 @@ const Login = (props: LoginProps) => {
                   errors={errors}
                   control={control}
                   labelClassName="form-label"
-                  placeholder="Enter username"
+                  placeholder="Enter Username"
                   className="form-control"
                 />
               </div>
